@@ -5,7 +5,7 @@ const axios = require('axios')
 const scrape = require('./src/scraper')
 require('dotenv').config()
 const fs = require('fs')
-const app = express()
+const app = express() 
 app.use(cors())
 app.use(express.urlencoded({extended : true}))
 app.use(express.static(path.join(__dirname, 'client/build')));
