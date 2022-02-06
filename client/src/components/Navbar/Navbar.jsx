@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom'
 import './navbar.css'
 
 const Navbar = () => {
-    return <ul></ul>
+    return <ul>
+        
+    </ul>
 }
 
 export default Navbar

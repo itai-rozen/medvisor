@@ -12,6 +12,35 @@ drug-drug interactions: https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxc
 libraries:
 Twillo - communication api
 auth0 - authenticate users
+jsonwebtoken - jwt authentication
+
+### captain's log 2.2.2022
+After several tries getting israely medication database from the Ministry of health, "Clalit" health
+organizations and more, I have decided not to compromise for the non-user frindly rxnav API.
+Though it is a very thorough database, I want my database to have israely commercial medicine
+names. Also I decided my app would be in hebrew and i need medication names also to be hebrew-suppoerted. I decided to try scraping MOH database.
+...
+success!! after long trial & error i made it. Encoutered several challenges:
+ 
+ - couldnt grab search text input field. The selector was accurate but puppeteer always returned null.
+ # solution: forced puppeteer to wait until page fully loads by using both "waitUntil" command
+ # and "page.waitforselector" with the input's selector (not sure i needed to use both, but it works).
+ - couldnt grab results container selector even though I used the solution above.
+ # solution: used the command waitForNetworkIdle(page,500,0) which make the browser wait until all results are fully loaded. Found this using the "screenshot" super-awsome function that takes a screenshot of the browser at a given moment. After doing this i saw a screenshot of the site's spinner, which made me realise the selector-grabbing function is invoked before page fully loads.
+ - result spans over 480 pages :O
+ # solution: found an element with number of results on the page, grabbed its text content, distilled the number of results from it, divideed by 10 (#results per page) and created a loop that scrapes page's result -> click on the "next page" button -> add a comma before next page's result are scraped (so the json file that the data is scraped to would run appropriately)
+still need to improve the active ingredient property. sometimes the ingredient contains 2 words and the scraper scrape out only one. it might cause troubles when i'll fetch drug interaction & indications in the future. will fix it over the next few days. Now i need to keep doing other stuff!
+
+ ive looked for a library that sends sms\whatsapp messages for clients. heard good things about twillo. After further research encountered "messageBird" that gives you unlimited text messages for 50 clients! will try it out tomorrow.
+
+ ### captain's log 3.2.2022
+ It's almost 6pm and i havent done much work. Decided to deploy the project to github & heroku
+ before it starts.
+ ...
+ made it! needed to add "start" script to the server package json and fix some more bugs in client's components. For now it is deployed with no issues (tfoo tfoo tfoo)
+
+ ### captain's log 6.2.22
+ It's been a horrible waste of time trying to get a free SMS sending package. after a lot of trial & error ive decided to let it go. Spent some more time trying to implement push notification then decided it would be some more waste of time. Right now focusing on medicine forms for users. If i'll have some spare time will do authentication :(:(:(
 
 # Getting Started with Create React App
 
