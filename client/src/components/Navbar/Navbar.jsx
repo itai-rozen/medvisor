@@ -20,7 +20,7 @@ const Navbar = ({ loggedUser, setIsSignup, setLoggedUser }) => {
       {loggedUser.email ?
         <>
           <Link to="/drugs">לרשימת התרופות שלך</Link>
-          <Button content="התנתק" oncClickFunc={} />
+          <Button content="התנתק" oncClickFunc={logOut} />
         </>
         :
         <>
