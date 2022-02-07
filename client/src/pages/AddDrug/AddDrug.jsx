@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Autocomplete, InputLabel, MenuItem, Select, TextField, FormControl } from '@mui/material/';
-import dayjs from 'dayjs'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/lab'
 import { Consumer } from './../../components/Context'
+import Button from './../../components/Button/Button'
 import './addDrug.css'
+import Reminder from '../../components/Reminder/Reminder';
 
 
 const AddDrug = ({ user, drugList }) => {
@@ -17,6 +18,10 @@ const AddDrug = ({ user, drugList }) => {
   const [startingDate, setStartingDate] = useState(new Date())
   const [dates, setDates] = useState([])
   const [notes, setNotes] = useState('')
+  const [showReminderModal, setShowReminderModal] = useState(false)
+  const [reminder, setReminder] = useState({})
+
+
   const spreadDrugObjs = () => {
     const drugs = []
     drugList.forEach((drugObj, index) => {
@@ -49,7 +54,7 @@ const AddDrug = ({ user, drugList }) => {
       c =>
         <div className="form-container">
           <form className="add-drug-form" onSubmit={handleSubmit}>
-            הרופא רשם לי
+
             <Autocomplete
               disablePortal
               id="combo-box-demo"
@@ -66,7 +71,7 @@ const AddDrug = ({ user, drugList }) => {
               }}
               renderInput={(params, index) => <TextField key={params.label + index} {...params} label="הקלד שם תרופה או חומר פעיל" />}
             />
-            משטר נטילה
+
             <label htmlFor="whenNeeded">
               לפי הצורך
               <input type="checkbox" name="whenNeeded" id="whenNeeded" defaultValue={false} onChange={() => setIsWhenNeeded(!isWhenNeeded)} />
@@ -78,10 +83,10 @@ const AddDrug = ({ user, drugList }) => {
                   value={unitAmount}
                   onChange={e => setUnitAmount(e.target.value)}
                   name="unitAmount"
-                  label="כמות"
+                  label="כמות יחידות"
                   type="number"
                   required />
-                יחידות
+
                 <TextField
                   variant="standard"
                   value={times}
@@ -90,7 +95,7 @@ const AddDrug = ({ user, drugList }) => {
                   label="פעמים"
                   type="number"
                   required />
-                כל
+
                 <FormControl >
                   <InputLabel id="demo-simple-select-label">תדירות</InputLabel>
                   <Select
@@ -100,9 +105,9 @@ const AddDrug = ({ user, drugList }) => {
                     label="תדירות"
                     onChange={e => setTimeUnit(e.target.value)}
                   >
-                    <MenuItem value={'day'}>יום</MenuItem>
-                    <MenuItem value={'week'}>שבוע</MenuItem>
-                    <MenuItem value={'month'}>חודש</MenuItem>
+                    <MenuItem value={'day'}>כל יום</MenuItem>
+                    <MenuItem value={'week'}>כל שבוע</MenuItem>
+                    <MenuItem value={'month'}>כל חודש</MenuItem>
                   </Select>
                 </FormControl>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -124,11 +129,13 @@ const AddDrug = ({ user, drugList }) => {
                   value={notes}
                   onChange={e => setNotes(e.target.value)}
                 />
+              <Button  content="קבע תזכורת" oncClickFunc={() => setShowReminderModal(true)} />
               </div>
 
             }
             <input type="submit" value="הוסף תרופה" />
           </form>
+          { showReminderModal && <Reminder drugName={drugName} times={times} timeUnit={timeUnit}  setShowReminderModal={setShowReminderModal} /> }
         </div >
     }
   </Consumer >
