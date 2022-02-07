@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './auth.css'
 import { GoogleLogin } from 'react-google-login'
+import axios from 'axios'
 import TextField from '@mui/material/TextField';
 import Input from '@mui/material/Input'
 import FormControl from '@mui/material/FormControl';
@@ -10,63 +11,61 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import Button from '../../components/Button/Button';
 
 
-const Auth = () => {
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [rePassword, setRePassword] = useState('')
-    const [isShowPassword, setIsShowPassword] = useState(true)
+const Auth = ({ isSignup, setIsSignUp }) => {
+  const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
+  const [rePassword, setRePassword] = useState('')
+  const [isShowPassword, setIsShowPassword] = useState(false)
+  const [isShowRePassword, setIsShowRePassword] = useState(false)
 
-    const handleClickShowPassword = () => {
-        setIsShowPassword(!isShowPassword)
-    };
 
-    const googleSuccess = res    => {
-        console.log(res)
-    }
-    const googleFailure = () => {
-        console.log('Sign in was unsuccessful. Try again later')
-    }
+  const handleForm = async e => {
+    e.preventDefault()
+    const isValidPassword = checkValidPassword()
+    console.log(name, password, rePassword, email)
+    await axios.post('/auth', {
+      name, password, rePassword, email, isSignup
+    })
+  }
 
-    const handleForm = e => {
-        e.preventDefault()
-        console.log(name, password, email)
-    }
+  const checkValidPassword = () => {
 
-    return <div className="auth-form-container">
-        <form className='auth-form' onSubmit={handleForm} >
-            
-            <TextField
-                variant="standard"
-                autoFocus
-                value={name}
-                name="name"
-                onChange={e => setName(e.target.value)}
-                label="שם מלא"
-                required />
-            <TextField
-                variant="standard"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                name="email"
-                label="email"
-                type="email"
-                required />
+  }
+
+  return <div className="auth-form-container">
+    <form className='auth-form' onSubmit={handleForm} >
+
+      <TextField
+        variant="standard"
+        autoFocus
+        value={name}
+        name="name"
+        onChange={e => setName(e.target.value)}
+        label="שם מלא"
+        required />
+      <TextField
+        variant="standard"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        name="email"
+        label="email"
+        type="email"
+        required />
+      <div className="password-wrapper">
+        <div className="password-validations"></div>
+        <div className="passwords-container">
+
         <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
-          <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+          <InputLabel htmlFor="standard-adornment-password">סיסמה</InputLabel>
           <Input
-            id="standard-adornment-password"
-            type={isShowPassword ? 'text' : 'password'}
-            value={password}
-            onChange={e => setPassword(e.target.value)}
+            id="standard-adornment-password" type={isShowPassword ? 'text' : 'password'}
+            value={password} onChange={e => setPassword(e.target.value)}
             endAdornment={
               <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
+                <IconButton aria-label="toggle password visibility" onClick={() => setIsShowPassword(!isShowPassword)}
                   onMouseDown={e => e.preventDefault()}
                 >
                   {isShowPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
@@ -75,18 +74,30 @@ const Auth = () => {
             }
           />
         </FormControl>
-        </form>
-        <GoogleLogin
-        
-        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-            render={renderProps => {
-               return <button onClick={renderProps.onClick} disabled={renderProps.disabled} ><GoogleIcon />Login with google</button>
-            }}
-            onSuccess={googleSuccess}
-            onFailure={googleFailure}
-            cookiePolicy='single_host_origin'
-        />
-    </div>
+        {
+          isSignup && <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+            <InputLabel htmlFor="standard-adornment-repassword">הקש סיסמה שנית</InputLabel>
+            <Input id="standard-adornment-repassword" type={isShowRePassword ? 'text' : 'password'}
+              value={rePassword} onChange={e => setRePassword(e.target.value)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setIsShowRePassword(!isShowRePassword)}
+                    onMouseDown={e => e.preventDefault()}
+                  >
+                    {isShowRePassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+        }
+        </div>
+      </div>
+      <input type="submit" value={isSignup ? 'הירשם' : 'התחבר'} />
+    </form>
+  </div>
 }
 
 export default Auth

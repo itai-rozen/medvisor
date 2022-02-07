@@ -8,6 +8,7 @@ import About from './pages/About/About';
 import { getToken, onMessageListener } from './firebase';
 import Auth from './pages/Auth/Auth';
 import DrugList from './pages/DrugList/DrugList';
+import AddDrug from './pages/AddDrug/AddDrug';
 
 function App() {
 
@@ -15,8 +16,8 @@ function App() {
   const [show, setShow] = useState(false);
   const [notification, setNotification] = useState({title: '', body: ''});
   const [isTokenFound, setTokenFound] = useState(false);
-  const [test, setTest] = useState('hi')
   const [loggedUser, setLoggedUser] = useState({})
+  const [isSignup, setIsSignup] = useState(false)
 
 
   onMessageListener().then(payload => {
@@ -34,14 +35,14 @@ function App() {
   }
 
   useEffect(() => {
-    // getMeds()
+    getMeds()
     // getToken(setTokenFound)
     messagingFirebase()
   }, [])
   return <Provider value={
     {
+      isSignup,
       drugList ,
-      test ,
       loggedUser,
       actions: {
         setLoggedUser
@@ -51,9 +52,10 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<About />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/drugs" element={<DrugList />} />
+        <Route path="/" element={<About setIsSignup={setIsSignup} />} />
+        <Route path="/auth" element={<Auth isSignup={isSignup} setIsSignup={setIsSignup} />} />
+        <Route path="/drugs" element={<DrugList  />} />
+        <Route path="/addDrug" element={<AddDrug drugList={drugList} />} />
       </Routes>
     </BrowserRouter>
   </Provider>

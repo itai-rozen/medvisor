@@ -11,16 +11,16 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'client/build')));
 const israMeds = fs.readFileSync('./src/israMeds.json')
-
+const medRoutes = require('./routes/medRoutes')
 
 const currMonth = new Date().getMonth()
 const currHour = new Date().getHours()
 
 if (currMonth % 6 === 0 && currHour === 4) scrape()
+app.use('/api', medRoutes)
 
-app.get('/api', async (req, res) => {
-        res.send(israMeds)
-})
+
+
 
 
 const mongoUrl = `mongodb+srv://itai_rozen:${process.env.MONGO_PASS}@cluster0.sihrb.mongodb.net/${process.env.DB}?retryWrites=true&w=majority`

@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import Button from '../../components/Button/Button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Consumer } from '../../components/Context'
 import './about.css'
 
-const About = () => {
+const About = ({setIsSignup}) => {
+    const navigate = useNavigate()
+
+    const updateSignStatusAndRedirect = isSign => {
+      setIsSignup(isSign)
+      navigate('/auth')
+    }
 
     useEffect(() => {
 
@@ -22,8 +28,8 @@ const About = () => {
                 <section className="login-section">
                     { 
                      !c.loggedUser.userName ? <>
-                            <Link to="/auth"><Button content="הירשם" /></Link>
-                            <Link to="/auth"><Button content="התחבר" /></Link>
+                            <Button oncClickFunc={() => updateSignStatusAndRedirect(true)} content="הירשם" />
+                            <Button oncClickFunc={() => updateSignStatusAndRedirect(false)} content="התחבר" />
                             <Link to="/drugs"><Button content="המשך כאורח" /></Link>
                      </>
                         :   <>

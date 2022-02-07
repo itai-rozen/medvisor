@@ -2,7 +2,7 @@ import React from 'react'
 import './button.css'
 
 const Button = ({content, oncClickFunc}) => {
-    return <button>{content}</button>
+    return <button onClick={oncClickFunc}>{content}</button>
 }
 
 export default Button

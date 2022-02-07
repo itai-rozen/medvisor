@@ -41,6 +41,9 @@ still need to improve the active ingredient property. sometimes the ingredient c
 
  ### captain's log 6.2.22
  It's been a horrible waste of time trying to get a free SMS sending package. after a lot of trial & error ive decided to let it go. Spent some more time trying to implement push notification then decided it would be some more waste of time. Right now focusing on medicine forms for users. If i'll have some spare time will do authentication :(:(:(
+ ...
+ ok I made a form for adding a drug. its been challenging making an autocomplete input using material ui because my database has initial 9000+ options (after filtering only unique results :O ). now
+ im gonna add an option to set a reminder for when the user wants to get notified. Also i bumped into a library that lets you pick multiple dates.. it could be awsome for people who dont have a regular regime (birth-control pills for example). Will try to play with it into the night. Also I responded to a guy who also got stuck on scraping the MOH database and Ive earned me some points & badges! made me feel like a contributing member B). 
 
 # Getting Started with Create React App
 

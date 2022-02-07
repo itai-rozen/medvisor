@@ -15,3 +15,8 @@
     align-items: center;
     justify-content: space-around;
 }
+
+.password-container {
+  display: flex;
+  flex-direction: column;
+}
