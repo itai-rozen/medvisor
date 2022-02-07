@@ -13,6 +13,8 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 const israMeds = fs.readFileSync('./src/israMeds.json')
 const medRoutes = require('./routes/medRoutes')
 
+
+
 const currMonth = new Date().getMonth()
 const currHour = new Date().getHours()
 

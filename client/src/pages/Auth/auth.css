@@ -1,13 +1,14 @@
 .auth-form-container {
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-.auth-form {
+  }
+  
+  .auth-form {
+    direction: ltr;
     width: 50%;
     height: 50%;
     display: flex;
@@ -16,7 +17,7 @@
     justify-content: space-around;
 }
 
-.password-container {
+.passwords-container {
   display: flex;
   flex-direction: column;
 }

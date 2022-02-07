@@ -10,6 +10,7 @@ import Auth from './pages/Auth/Auth';
 import DrugList from './pages/DrugList/DrugList';
 import AddDrug from './pages/AddDrug/AddDrug';
 
+
 function App() {
 
   const [drugList, setDrugList] = useState([])
@@ -20,11 +21,13 @@ function App() {
   const [isSignup, setIsSignup] = useState(false)
 
 
+
   onMessageListener().then(payload => {
     setShow(true);
     setNotification({title: payload.notification.title, body: payload.notification.body})
     console.log(payload);
   }).catch(err => console.log('failed: ', err));
+
   const messagingFirebase =  () => {
     getToken(setTokenFound)
   }
@@ -33,11 +36,11 @@ function App() {
     const result = await axios.get('/api')
     setDrugList(result.data)
   }
-
   useEffect(() => {
     getMeds()
     // getToken(setTokenFound)
-    messagingFirebase()
+    // messagingFirebase()
+    
   }, [])
   return <Provider value={
     {
@@ -50,11 +53,11 @@ function App() {
     }
   }>
     <BrowserRouter>
-      <Navbar />
+      <Navbar loggedUser={loggedUser} setLoggedUser={setLoggedUser} setIsSignup={setIsSignup} />
       <Routes>
         <Route path="/" element={<About setIsSignup={setIsSignup} />} />
-        <Route path="/auth" element={<Auth isSignup={isSignup} setIsSignup={setIsSignup} />} />
-        <Route path="/drugs" element={<DrugList  />} />
+        <Route path="/auth" element={<Auth setLoggedUser={setLoggedUser} isSignup={isSignup} setIsSignup={setIsSignup} />} />
+        <Route path="/drugs" element={<DrugList loggedUser={loggedUser} />} />
         <Route path="/addDrug" element={<AddDrug drugList={drugList} />} />
       </Routes>
     </BrowserRouter>

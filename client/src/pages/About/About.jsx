@@ -7,10 +7,7 @@ import './about.css'
 const About = ({setIsSignup}) => {
     const navigate = useNavigate()
 
-    const updateSignStatusAndRedirect = isSign => {
-      setIsSignup(isSign)
-      navigate('/auth')
-    }
+
 
     useEffect(() => {
 
@@ -26,17 +23,6 @@ const About = ({setIsSignup}) => {
                     </p>
                 </header>
                 <section className="login-section">
-                    { 
-                     !c.loggedUser.userName ? <>
-                            <Button oncClickFunc={() => updateSignStatusAndRedirect(true)} content="הירשם" />
-                            <Button oncClickFunc={() => updateSignStatusAndRedirect(false)} content="התחבר" />
-                            <Link to="/drugs"><Button content="המשך כאורח" /></Link>
-                     </>
-                        :   <>
-                            <Link to="/drugs"><Button content="לתרופות שלך" /></Link>
-                            <Link to="/auth"><Button content="החלף משתמש" /></Link>
-                    </>
-                }
                 </section>
 
             </div>
