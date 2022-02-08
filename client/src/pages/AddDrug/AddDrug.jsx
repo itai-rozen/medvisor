@@ -28,7 +28,7 @@ const AddDrug = ({ user, drugList }) => {
     console.log(drugStrs)
   }
 
-  const getDrugDescription = () => {
+  const getDrugDescription = async () => {
     const chosenDrug = drugList.find(drug => {                
       if (drug.drugHebTitle === drugName || 
           drug.drugEngTitle === drugName || 
