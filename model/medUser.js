@@ -1,3 +1,4 @@
+const { min } = require('date-fns')
 const mongoose = require('mongoose')
 
 
@@ -15,22 +16,28 @@ const PatientSchema = new mongoose.Schema({
   },
   medicines: [{
     drugName: {
-      type: String
+      type: String,
+      unique: true
     },
     isWhenNeeded: {
       type: Boolean,
       default: false
     },
     unitAmount: {
-      type: Number
+      type: Number,
+      min: 0
     },
     times: {
-      type: Number
+      type: Number,
+      min:0
     },
     timeUnit: {
-      type: Number
+      type: String,
     },
     notes: {
+      type: String
+    },
+    rxId: {
       type: String
     },
     description: {

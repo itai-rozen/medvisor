@@ -9,6 +9,19 @@ const medController = {}
 
 
 
+medController.getMeds = (req, res) => {
+  res.send(israMeds)
+}
+
+medController.getUser = async (req,res) => {
+  try{
+    const { email } = await req.body  
+    const chosenUser = await Patient.findOne({email: email})
+    res.send(chosenUser)
+  }catch(err){
+    console.log(err)
+  }
+}
 
 medController.authUser = async (req, res) => {
   try {

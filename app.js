@@ -5,14 +5,16 @@ const scrape = require('./src/scraper')
 require('dotenv').config()
 const fs = require('fs')
 const app = express()
+const medRoutes = require('./routes/medRoutes')
+const drugRoutes = require('./routes/drugRoutes')
+const reminderRoutes = require('./routes/reminderRoutes')
 const mongoose = require('mongoose')
+
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'client/build')));
-const medRoutes = require('./routes/medRoutes')
-const drugRoutes = require('./routes/drugRoutes')
-const reminderRoutes = require('./routes/reminderRoutes')
+
 
 
 
@@ -20,7 +22,6 @@ const currMonth = new Date().getMonth()
 const currHour = new Date().getHours()
 
 if (currMonth % 6 === 0 && currHour === 4) scrape()
-scrape()
 
 app.use('/api', medRoutes)
 app.use('/api/drug', drugRoutes)

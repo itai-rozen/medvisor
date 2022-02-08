@@ -1,5 +1,8 @@
 const express = require('express')
-const {getMeds, authUser, addDrug } = require('./../controllers/medController')
+const { addDrug, deleteDrug } = require('./../controllers/drugController')
 const drugRouter = express.Router()
 
+
+drugRouter.post('/addDrug', addDrug)
+drugRouter.post('/deleteDrug', deleteDrug)
 module.exports = drugRouter

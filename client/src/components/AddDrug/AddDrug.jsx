@@ -1,49 +1,58 @@
 import React, { useState, useEffect } from 'react'
 import { Autocomplete, InputLabel, MenuItem, Select, TextField, FormControl } from '@mui/material/';
-import { Consumer } from './../../components/Context'
+import { Consumer } from '../Context'
 import axios from 'axios'
+import Button from './../Button/Button'
 import './addDrug.css'
 
 
-const AddDrug = ({ loggedUser, drugList }) => {
+const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser }) => {
   const [drugName, setDrugName] = useState('')
   const [isWhenNeeded, setIsWhenNeeded] = useState(false)
-  const [unitAmount, setUnitAmount] = useState(1)
-  const [times, setTimes] = useState(1)
+  const [unitAmount, setUnitAmount] = useState(0)
+  const [times, setTimes] = useState(0)
   const [timeUnit, setTimeUnit] = useState('day')
-  const [drugStrs, setDrugStrs] = useState([])
   const [notes, setNotes] = useState('')
   const [error, setError] = useState('')
 
 
 
-  const spreadDrugObjs = () => {
-    const drugs = []
-    drugList.forEach((drugObj, index) => {
-      for (let prop in drugObj) drugs.push(drugObj[prop])
-    })
-    const uniqueDrugs = [...new Set(drugs)]
-    console.log(uniqueDrugs)
-    setDrugStrs(uniqueDrugs)
-    console.log(drugStrs)
-  }
+
 
   const getDrugDescription = async () => {
-    const chosenDrug = drugList.find(drug => {                
-      if (drug.drugHebTitle === drugName || 
-          drug.drugEngTitle === drugName || 
-          drug.activeIngredient === drugName) return drug
+    const chosenDrug = drugList.find(drug => {
+      if (drug.drugHebTitle === drugName ||
+        drug.drugEngTitle === drugName ||
+        drug.activeIngredient === drugName) return drug
     })
-     if (chosenDrug.activeIngredient){
-       const {activeIngredient} = chosenDrug
-       const rxId = await axios.get(`https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${activeIngredient}&search=2`)
-     }
+    // TODO see if this function fetches the id correctly, add it to the medicine object and
+    // continue with fetching the description!
+    if (chosenDrug.activeIngredient) {
+      const { activeIngredient } = chosenDrug
+      const ingredientForApiFetching = activeIngredient?.split(' ')?.join('+')
+      try {
+        const rxIdRes = await axios.get(`https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${ingredientForApiFetching}&search=2`)
+        const rxId = rxIdRes.data?.idGroup?.rxnormId[0]
+        console.log('drug rxid @getDrugDescription @addDrug: ', rxId)
+        const descriptionRes = await axios.get(`https://rxnav.nlm.nih.gov/REST/rxclass/class/byDrugName.json?drugName=${ingredientForApiFetching}&relaSource=MEDRT&relas=may_treat`)
+        console.log('description res: ', descriptionRes)
+        const descriptionArr = descriptionRes.data?.rxclassDrugInfoList?.rxclassDrugInfo
+        console.log('description arrat: ', descriptionArr)
+        const description = descriptionArr.map(desc => desc.rxclassMinConceptItem?.className).join(',')
+        console.log('drug description @getDrugDescription @addDrug: ', description)
+
+        return { description, rxId }
+      } catch (err) {
+        console.log(err)
+      }
+    }
   }
 
-  const handleSubmit = async e => {
+  const addDrug = async e => {
     e.preventDefault()
-    const description = getDrugDescription()
-    if (loggedUser.email){
+    const { description, rxId } = await getDrugDescription()
+    console.log('description and rxid @handleSubmit @addDrug cpt: ', description, ' ', rxId)
+    if (loggedUser.email) {
       await axios.post('/addDrug', {
         email: loggedUser.email,
         drugName,
@@ -51,42 +60,44 @@ const AddDrug = ({ loggedUser, drugList }) => {
         unitAmount,
         times,
         timeUnit,
-        notes
+        notes,
+        rxId,
+        description
       })
+      getUser()
     } else {
-      if (!loggedUser.medicines) loggedUser.medicins = []
-      loggedUser.medicines.push({
+      const loggedUserCopy = { ...loggedUser }
+      if (!loggedUserCopy.medicines) loggedUserCopy.medicines = []
+      loggedUserCopy.medicines.push({
         drugName,
         isWhenNeeded,
         unitAmount,
         times,
         timeUnit,
-        notes
+        notes,
+        description,
+        rxId
       })
+      console.log('logged user: ', loggedUserCopy)
+      setLoggedUser(loggedUserCopy)
     }
-    console.log('drug name: ', drugName)
-    console.log('when needed? ', isWhenNeeded)
-    console.log('amount of units: ', unitAmount)
-    console.log('times per ', times)
-    console.log('time unit: ', timeUnit)
-    console.log('notes: ', notes)
   }
 
 
   useEffect(() => {
-    spreadDrugObjs()
-  }, [drugList])
+
+  }, [])
 
   return <Consumer>
     {
       c =>
         <div className="form-container">
-          <form className="add-drug-form" onSubmit={handleSubmit}>
+          <form className="add-drug-form modal" onSubmit={addDrug}>
 
             <Autocomplete
               disablePortal
               id="combo-box-demo"
-              options={drugStrs}
+              options={c.drugStrs}
               sx={{ width: 300 }}
               value={drugName}
               onChange={e => setDrugName(e.target.innerText)}
@@ -106,17 +117,23 @@ const AddDrug = ({ loggedUser, drugList }) => {
             {
               !isWhenNeeded && <div className="form-choices">
                 <TextField
-                  variant="outlined"
-                  value={unitAmount}
+                  inputProps={{ min: 0, style: { textAlign: 'center', direction: 'rtl' } }}
+                  variant="standard"
+                  placeholder={unitAmount}
                   onChange={e => setUnitAmount(e.target.value)}
                   name="unitAmount"
                   label="כמות יחידות"
                   type="number"
-                  required />
+                  required
+                  sx={{
+                    direction: 'rtl',
+                    textAlign: 'right'
+                  }} />
 
                 <TextField
+                  inputProps={{ min: 0, style: { textAlign: 'center' } }}
                   variant="standard"
-                  value={times}
+                  placeholder={times}
                   onChange={e => setTimes(e.target.value)}
                   name="times"
                   label="פעמים"
@@ -150,6 +167,7 @@ const AddDrug = ({ loggedUser, drugList }) => {
 
             }
             <input type="submit" value="הוסף תרופה" />
+            <Button content="X" oncClickFunc={() => c.actions.setShowAddModal(false)} />
           </form>
           <div className="message">{error}</div>
         </div >

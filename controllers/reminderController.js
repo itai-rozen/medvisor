@@ -6,14 +6,11 @@ const reminderController = {}
 
 reminderController.addReminder = async (req,res) => {
   try{
-    const { email,drugName,isWhenNeeded,unitAmount,times,timeUnit,notes } = await req.body
+    // TODO verify if those are the params needed for setting reminders
+    // also check their names
+    
+    const { email,drugObj, timeUnit, duration } = await req.body
     const newMedicineObject = {
-      drugName,
-      isWhenNeeded,
-      unitAmount,
-      times,
-      timeUnit,
-      notes
     }
     await Patient.findOne({email: email}, {$push: {medicins: {newMedicineObject}}})
     res.send({success: 'ok'})

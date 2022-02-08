@@ -11,19 +11,5 @@
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.reminder-modal {
-  position: relative;
-  width: 50%;
-  height: 50%;
-  background-color: #fff;
-}
 
-.reminder-modal button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 5px;
-  padding: 5px;
-  font-size: 2rem;
-  border-radius: 14px;
-}
+

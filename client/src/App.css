@@ -11,3 +11,23 @@
 a { text-decoration: none;}
 ul { list-style: none;}
 button { cursor: pointer; }
+
+.modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 50%;
+  height: 70%;
+  background-color: #fff;
+}
+.modal button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 5px;
+  padding: 5px;
+  font-size: 2rem;
+  border-radius: 14px;
+}

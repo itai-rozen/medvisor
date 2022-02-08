@@ -27,7 +27,7 @@ drugController.deleteDrug = async (req,res) => {
 
   try {
     const { email, drugName } = await req.body
-    await   Patient.findOne({ _id: diveId }, { $pull: { medicines: { drugName: drugName } }}, 
+    await   Patient.findOne({ email: email }, { $pull: { medicines: { drugName: drugName } }}, 
       { safe: true, multi:true })
   }catch(err){
     res.send({error: err})

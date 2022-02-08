@@ -19,8 +19,9 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
 
   const navigate = useNavigate()
 
-  const handleForm = async e => {
+  const signUser = async e => {
     e.preventDefault()
+    // TODO add password validation
     const isValidPassword = checkValidPassword()
     console.log(name, password, rePassword, email)
     try {
@@ -46,7 +47,7 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
   }
 
   return <div className="auth-form-container">
-    <form className='auth-form' onChange={() => setError('')} onSubmit={handleForm} >
+    <form className='auth-form' onChange={() => setError('')} onSubmit={signUser} >
       {
 
         isSignup && <TextField

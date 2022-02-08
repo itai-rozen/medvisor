@@ -6,7 +6,7 @@ import './reminder.css'
 
 const Reminder = ({ setShowReminderModal }) => {
   return <div className="reminder-container">
-    <div className="reminder-modal">
+    <div className="reminder-modal modal">
       <Button  content="X" oncClickFunc={() => setShowReminderModal(false)} />
       <h3>{}</h3>
       {/* <LocalizationProvider dateAdapter={AdapterDateFns}>

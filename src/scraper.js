@@ -34,10 +34,10 @@ const scrape = async () => {
         const hebTitleSelector = 'div.infoText > div > div > div.firstRowTitle.ng-binding'   
         const engTitleSelector = 'div.infoText > div > div > div > span'
         const activeIngredientSelector = 'div.infoText > div > div > div.secondRowTitle.moreInfo.ng-binding.ng-scope'
-        const acIng =  el.querySelector(activeIngredientSelector).textContent.trim().split(' ')
+        const acIng =  el.querySelector(activeIngredientSelector)?.textContent?.trim()?.split(' ') || ['','','']
         return JSON.stringify({
-               drugHebTitle : el.querySelector(hebTitleSelector).textContent,
-               drugEngTitle : el.querySelector(engTitleSelector).textContent,
+               drugHebTitle : el.querySelector(hebTitleSelector)?.textContent,
+               drugEngTitle : el.querySelector(engTitleSelector)?.textContent,
                activeIngredient : `${acIng[2]} ${/^[a-zA-Z]+$/.test(acIng[3]) && (acIng[3]?.length > 2)? acIng[3] : ''}`.trim()
            })
            
