@@ -58,7 +58,7 @@ function App() {
         <Route path="/" element={<About setIsSignup={setIsSignup} />} />
         <Route path="/auth" element={<Auth setLoggedUser={setLoggedUser} isSignup={isSignup} setIsSignup={setIsSignup} />} />
         <Route path="/drugs" element={<DrugList loggedUser={loggedUser} />} />
-        <Route path="/addDrug" element={<AddDrug drugList={drugList} />} />
+        <Route path="/addDrug" element={<AddDrug drugList={drugList} loggedUser={loggedUser} />} />
       </Routes>
     </BrowserRouter>
   </Provider>

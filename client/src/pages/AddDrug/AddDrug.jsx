@@ -5,7 +5,7 @@ import axios from 'axios'
 import './addDrug.css'
 
 
-const AddDrug = ({ user, drugList }) => {
+const AddDrug = ({ loggedUser, drugList }) => {
   const [drugName, setDrugName] = useState('')
   const [isWhenNeeded, setIsWhenNeeded] = useState(false)
   const [unitAmount, setUnitAmount] = useState(1)
