@@ -46,12 +46,12 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
   }
 
   return <div className="auth-form-container">
-    <form className='auth-form' onSubmit={handleForm} >
+    <form className='auth-form' onChange={() => setError('')} onSubmit={handleForm} >
       {
 
         isSignup && <TextField
           variant="standard"
-          autoFocus
+          autoFocus={isSignup}
           value={name}
           name="name"
           onChange={e => setName(e.target.value)}
@@ -62,6 +62,7 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
       <TextField
         variant="standard"
         value={email}
+        autoFocus={!isSignup}
         onChange={e => setEmail(e.target.value)}
         name="email"
         label="email"

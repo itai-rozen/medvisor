@@ -30,18 +30,34 @@ const PatientSchema = new mongoose.Schema({
     timeUnit: {
       type: Number
     },
-    startingData: {
-      type: Date
+    notes: {
+      type: String
     },
-    isSetReminder: {
-      type: Boolean,
-      default: false
-    },
+    description: {
+      type: String,
+      default: undefined
+    }
+  }],
+    reminders: [{
+      durationInDays: {
+        type: Number
+      },
+      daysInWeek: {
+        type:Array,
+        default: undefined
+      },
+      daysInMonth: {
+        type: Array,
+        default: undefined
+      },
+      medicines: {
+        type: Array
+      }
+    }],
     manualReminderDates: {
       type: Array,
       default: undefined
     }
-  }]
 })
 
 const Patient = mongoose.model('Patient', PatientSchema)

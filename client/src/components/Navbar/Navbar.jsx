@@ -9,6 +9,7 @@ const Navbar = ({ loggedUser, setIsSignup, setLoggedUser }) => {
   const logOut = () => {
     setLoggedUser({})
     localStorage.clear()
+    navigate('/')
   }
 
   const renderContent = () => {

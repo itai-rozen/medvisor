@@ -1,11 +1,18 @@
-import React from 'react'
+import React,{ useState, useEffect} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
+import Button from './../../components/Button/Button'
+import Reminder from './../../components/Reminder/Reminder'
 import './drugList.css'
 
 const DrugList = ({ loggedUser }) => {
+  const [showReminderModal, setShowReminderModal] = useState(false)
+  const [reminder, setReminder] = useState({})
+
+
   return <div className='druglist-container'>
     <h2>רשימת התרופות שלך</h2>
+    <div className="druglist-wrapper">
+
     <ul className="medicine-headers">
       <li className='header-item'>שם התרופה</li>
       <li className='header-item'>לפי הצורך</li>
@@ -27,7 +34,11 @@ const DrugList = ({ loggedUser }) => {
           <li className="medicine-details-item">{notes}</li>
       </ul>
     })}
+    </div>
     <Link to="/addDrug">הוסף תרופה</Link>
+    {(loggedUser?.medicines?.length > 0) && <Button  content="קבע תזכורת" oncClickFunc={() => setShowReminderModal(true)} />}
+    { showReminderModal &&  <Reminder /> }
+
   </div>
 }
 

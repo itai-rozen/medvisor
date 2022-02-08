@@ -45,6 +45,16 @@ still need to improve the active ingredient property. sometimes the ingredient c
  ok I made a form for adding a drug. its been challenging making an autocomplete input using material ui because my database has initial 9000+ options (after filtering only unique results :O ). now
  im gonna add an option to set a reminder for when the user wants to get notified. Also i bumped into a library that lets you pick multiple dates.. it could be awsome for people who dont have a regular regime (birth-control pills for example). Will try to play with it into the night. Also I responded to a guy who also got stuck on scraping the MOH database and Ive earned me some points & badges! made me feel like a contributing member B). 
 
+### captain's log 8.2.22
+made a lot of AUTH today. implemented bcrypt & jwt. jwt has not yet been completely implemented but for now its sufficient. thought a lot about what is the best way to add reminders to the user's medicine array. At first i thought every med should have its own reminder set, then I decided it should be managed only at the drug list page and should gather the relevant meds to a whole reminder.
+found a great library to schedule email sending on time increments called CRON.
+
+if something goes wrong i should look at:
+the patient model,
+the addDrug components, specificaly on the handleSubmit func
+backend for the /addDrug route
+drug & reminder controller, route
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

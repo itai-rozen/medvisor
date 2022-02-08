@@ -1,19 +1,18 @@
 
 const fs = require('fs')
 const israMeds = fs.readFileSync('./src/israMeds.json')
-const Patient = require('./../model/medUser')
-const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const {signIn, signUp} = require('./../utils/auth')
+const Patient = require('./../model/medUser')
 require('dotenv').config({path: './../.env'})
 const medController = {}
-medController.getMeds = (req, res) => {
-  res.send(israMeds)
-}
+
+
+
 
 medController.authUser = async (req, res) => {
-  const { isSignup, name, password, rePassword, email } = await req.body
   try {
+    const { isSignup, name, password, rePassword, email } = await req.body
     const result = isSignup ? 
     await signUp(name,email,password,rePassword) : 
     await signIn(email,password)
@@ -24,7 +23,6 @@ medController.authUser = async (req, res) => {
     console.log(err)
     res.send({error:err})
   }
-  
 }
 
 

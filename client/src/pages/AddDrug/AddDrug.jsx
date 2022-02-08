@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Autocomplete, InputLabel, MenuItem, Select, TextField, FormControl } from '@mui/material/';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { LocalizationProvider, DesktopDatePicker } from '@mui/lab'
 import { Consumer } from './../../components/Context'
-import Button from './../../components/Button/Button'
+import axios from 'axios'
 import './addDrug.css'
-import Reminder from '../../components/Reminder/Reminder';
 
 
 const AddDrug = ({ user, drugList }) => {
@@ -15,11 +12,9 @@ const AddDrug = ({ user, drugList }) => {
   const [times, setTimes] = useState(1)
   const [timeUnit, setTimeUnit] = useState('day')
   const [drugStrs, setDrugStrs] = useState([])
-  const [startingDate, setStartingDate] = useState(new Date())
-  const [dates, setDates] = useState([])
   const [notes, setNotes] = useState('')
-  const [showReminderModal, setShowReminderModal] = useState(false)
-  const [reminder, setReminder] = useState({})
+  const [error, setError] = useState('')
+
 
 
   const spreadDrugObjs = () => {
@@ -33,15 +28,48 @@ const AddDrug = ({ user, drugList }) => {
     console.log(drugStrs)
   }
 
-  const handleSubmit = e => {
+  const getDrugDescription = () => {
+    const chosenDrug = drugList.find(drug => {                
+      if (drug.drugHebTitle === drugName || 
+          drug.drugEngTitle === drugName || 
+          drug.activeIngredient === drugName) return drug
+    })
+     if (chosenDrug.activeIngredient){
+       const {activeIngredient} = chosenDrug
+       const rxId = await axios.get(`https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${activeIngredient}&search=2`)
+     }
+  }
+
+  const handleSubmit = async e => {
     e.preventDefault()
+    const description = getDrugDescription()
+    if (loggedUser.email){
+      await axios.post('/addDrug', {
+        email: loggedUser.email,
+        drugName,
+        isWhenNeeded,
+        unitAmount,
+        times,
+        timeUnit,
+        notes
+      })
+    } else {
+      if (!loggedUser.medicines) loggedUser.medicins = []
+      loggedUser.medicines.push({
+        drugName,
+        isWhenNeeded,
+        unitAmount,
+        times,
+        timeUnit,
+        notes
+      })
+    }
     console.log('drug name: ', drugName)
     console.log('when needed? ', isWhenNeeded)
     console.log('amount of units: ', unitAmount)
     console.log('times per ', times)
     console.log('time unit: ', timeUnit)
     console.log('notes: ', notes)
-    console.log('starting dateL ',startingDate)
   }
 
 
@@ -71,7 +99,6 @@ const AddDrug = ({ user, drugList }) => {
               }}
               renderInput={(params, index) => <TextField key={params.label + index} {...params} label="הקלד שם תרופה או חומר פעיל" />}
             />
-
             <label htmlFor="whenNeeded">
               לפי הצורך
               <input type="checkbox" name="whenNeeded" id="whenNeeded" defaultValue={false} onChange={() => setIsWhenNeeded(!isWhenNeeded)} />
@@ -110,17 +137,6 @@ const AddDrug = ({ user, drugList }) => {
                     <MenuItem value={'month'}>כל חודש</MenuItem>
                   </Select>
                 </FormControl>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DesktopDatePicker
-                    inputFormat="dd/MM/yyyy"
-                    label="ת.התחלה"
-                    value={startingDate}
-                    onChange={(newValue) => {
-                      setStartingDate(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
                 <TextField
                   id="outlined-textarea"
                   label="הערות נוספות לנטילה"
@@ -129,13 +145,13 @@ const AddDrug = ({ user, drugList }) => {
                   value={notes}
                   onChange={e => setNotes(e.target.value)}
                 />
-              <Button  content="קבע תזכורת" oncClickFunc={() => setShowReminderModal(true)} />
+
               </div>
 
             }
             <input type="submit" value="הוסף תרופה" />
           </form>
-          { showReminderModal && <Reminder drugName={drugName} times={times} timeUnit={timeUnit}  setShowReminderModal={setShowReminderModal} /> }
+          <div className="message">{error}</div>
         </div >
     }
   </Consumer >
