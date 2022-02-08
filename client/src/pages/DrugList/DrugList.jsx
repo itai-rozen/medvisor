@@ -30,7 +30,7 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
           <h2>רשימת התרופות שלך</h2>
           <div className="druglist-wrapper">
 
-            <ul className="medicine-headers">
+            <ul className="medicine-headers list">
               <li className='header-item'>שם התרופה</li>
               <li className='header-item'>לפי הצורך</li>
               <li className='header-item'>יחידות בכל נטילה</li>
@@ -42,7 +42,7 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
             </ul>
             {loggedUser.medicines && loggedUser.medicines.map(medicine => {
               const { drugName, isWhenNeeded, unitAmount, times, timeUnit, notes, description } = medicine
-              return <ul className="medicine-details-list" key={drugName}>
+              return <ul className="medicine-details-list list" key={drugName}>
                 <li className="medicine-details-item">{drugName}</li>
                 <li className="medicine-details-item">{isWhenNeeded}</li>
                 <li className="medicine-details-item">{unitAmount}</li>
@@ -55,7 +55,7 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
             })}
           </div>
           <Button content="הוסף תרופה" oncClickFunc={() => c.actions.setShowAddModal(true)} />
-          {c.showAddModal && <AddDrug loggedUser={loggedUser} setLoggedUser={setLoggedUser} getUser={getUser} drugList={c.drugList} />}
+          {c.showAddModal && <AddDrug loggedUser={loggedUser} setLoggedUser={setLoggedUser} setShowAddModal={c.actions.setShowAddModal} getUser={getUser} drugList={c.drugList} />}
           {
             (loggedUser?.medicines?.length > 0) && <Link to="/reminders">לניהול התזכורות</Link>
           }

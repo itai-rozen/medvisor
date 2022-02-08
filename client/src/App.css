@@ -16,11 +16,13 @@ button { cursor: pointer; }
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
   width: 50%;
-  height: 70%;
+  height: 80%;
   background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 1px 1px 10px 1px #000;
 }
 .modal button {
   position: absolute;

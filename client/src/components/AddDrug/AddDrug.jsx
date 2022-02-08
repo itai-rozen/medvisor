@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Autocomplete, InputLabel, MenuItem, Select, TextField, FormControl } from '@mui/material/';
+import { Autocomplete, InputLabel, MenuItem, FormControlLabel, Checkbox, Select, TextField, FormControl } from '@mui/material/';
 import { Consumer } from '../Context'
 import axios from 'axios'
 import Button from './../Button/Button'
 import './addDrug.css'
 
 
-const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser }) => {
+const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal }) => {
   const [drugName, setDrugName] = useState('')
   const [isWhenNeeded, setIsWhenNeeded] = useState(false)
   const [unitAmount, setUnitAmount] = useState(0)
@@ -15,7 +15,15 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser }) => {
   const [notes, setNotes] = useState('')
   const [error, setError] = useState('')
 
-
+  const resetStates = () => {
+    setDrugName('')
+    setIsWhenNeeded(false)
+    setUnitAmount(0)
+    setTimes(0)
+    setTimeUnit('day')
+    setNotes('')
+    setError('')
+  }
 
 
 
@@ -68,6 +76,10 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser }) => {
     } else {
       const loggedUserCopy = { ...loggedUser }
       if (!loggedUserCopy.medicines) loggedUserCopy.medicines = []
+      if (loggedUser.medicines.find(med => med.drugName === drugName)) {
+        setError('לא ניתן להזין את  אותה התרופה פעמיים')
+        return
+      }
       loggedUserCopy.medicines.push({
         drugName,
         isWhenNeeded,
@@ -81,6 +93,8 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser }) => {
       console.log('logged user: ', loggedUserCopy)
       setLoggedUser(loggedUserCopy)
     }
+    setShowAddModal(false)
+    resetStates()
   }
 
 
@@ -110,62 +124,59 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser }) => {
               }}
               renderInput={(params, index) => <TextField key={params.label + index} {...params} label="הקלד שם תרופה או חומר פעיל" />}
             />
-            <label htmlFor="whenNeeded">
-              לפי הצורך
-              <input type="checkbox" name="whenNeeded" id="whenNeeded" defaultValue={false} onChange={() => setIsWhenNeeded(!isWhenNeeded)} />
-            </label>
-            {
-              !isWhenNeeded && <div className="form-choices">
-                <TextField
-                  inputProps={{ min: 0, style: { textAlign: 'center', direction: 'rtl' } }}
-                  variant="standard"
-                  placeholder={unitAmount}
-                  onChange={e => setUnitAmount(e.target.value)}
-                  name="unitAmount"
-                  label="כמות יחידות"
-                  type="number"
-                  required
-                  sx={{
-                    direction: 'rtl',
-                    textAlign: 'right'
-                  }} />
+            <FormControlLabel control={<Checkbox onChange={() => setIsWhenNeeded(!isWhenNeeded)} size="medium" />} label="לפי הצורך" />
+            <div className="form-choices-container">
+              {
+                !isWhenNeeded && <div className="form-choices">
+                  <TextField
+                    inputProps={{ min: 0, style: { textAlign: 'center', direction: 'rtl' } }}
+                    variant="standard"
+                    onChange={e => setUnitAmount(e.target.value)}
+                    name="unitAmount"
+                    label="כמות יחידות"
+                    type="number"
+                    required
+                    sx={{
+                      direction: 'rtl',
+                      textAlign: 'right'
+                    }} />
 
-                <TextField
-                  inputProps={{ min: 0, style: { textAlign: 'center' } }}
-                  variant="standard"
-                  placeholder={times}
-                  onChange={e => setTimes(e.target.value)}
-                  name="times"
-                  label="פעמים"
-                  type="number"
-                  required />
+                  <TextField
+                    inputProps={{ min: 0, style: { textAlign: 'center' } }}
+                    variant="standard"
+                    onChange={e => setTimes(e.target.value)}
+                    name="times"
+                    label="פעמים"
+                    type="number"
+                    required />
 
-                <FormControl >
-                  <InputLabel id="demo-simple-select-label">תדירות</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={timeUnit}
-                    label="תדירות"
-                    onChange={e => setTimeUnit(e.target.value)}
-                  >
-                    <MenuItem value={'day'}>כל יום</MenuItem>
-                    <MenuItem value={'week'}>כל שבוע</MenuItem>
-                    <MenuItem value={'month'}>כל חודש</MenuItem>
-                  </Select>
-                </FormControl>
-                <TextField
-                  id="outlined-textarea"
-                  label="הערות נוספות לנטילה"
-                  placeholder="עם אוכל"
-                  multiline
-                  value={notes}
-                  onChange={e => setNotes(e.target.value)}
-                />
+                  <FormControl >
+                    <InputLabel id="demo-simple-select-label">תדירות</InputLabel>
+                    <Select
 
-              </div>
-
-            }
+                      variant='standard'
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={timeUnit}
+                      label="תדירות"
+                      onChange={e => setTimeUnit(e.target.value)}
+                    >
+                      <MenuItem value={'day'}>כל יום</MenuItem>
+                      <MenuItem value={'week'}>כל שבוע</MenuItem>
+                      <MenuItem value={'month'}>כל חודש</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    id="outlined-textarea"
+                    label="הערות נוספות לנטילה"
+                    placeholder="עם אוכל"
+                    multiline
+                    value={notes}
+                    onChange={e => setNotes(e.target.value)}
+                  />
+                </div>
+              }
+            </div>
             <input type="submit" value="הוסף תרופה" />
             <Button content="X" oncClickFunc={() => c.actions.setShowAddModal(false)} />
           </form>
