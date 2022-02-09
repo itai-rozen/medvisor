@@ -9,6 +9,20 @@
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+  direction: rtl;
+}
+
+.reminder-modal.modal {
+  justify-content: center;
+}
+
+.reminder-modal input {
+  /* margin: 0; */
+  display: block;
+}
+
+.medication-choices-container {
+  display: flex;
 }
 
 

@@ -43,27 +43,7 @@ const PatientSchema = new mongoose.Schema({
       type: String,
       default: undefined
     }
-  }],
-    reminders: [{
-      durationInDays: {
-        type: Number
-      },
-      daysInWeek: {
-        type:Array,
-        default: undefined
-      },
-      daysInMonth: {
-        type: Array,
-        default: undefined
-      },
-      medicines: {
-        type: Array
-      }
-    }],
-    manualReminderDates: {
-      type: Array,
-      default: undefined
-    }
+  }]
 })
 
 const Patient = mongoose.model('Patient', PatientSchema)

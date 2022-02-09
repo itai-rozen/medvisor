@@ -7,7 +7,7 @@ import About from './pages/About/About';
 import { getToken, onMessageListener } from './firebase';
 import Auth from './pages/Auth/Auth';
 import DrugList from './pages/DrugList/DrugList';
-import ReminderList from './pages/Reminders/ReminderList';
+import ReminderList from './pages/ReminderList/ReminderList';
 import './App.css';
 
 

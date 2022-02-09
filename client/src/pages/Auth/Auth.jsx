@@ -7,6 +7,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import { TextField, Input, FormControl, InputLabel, InputAdornment, IconButton } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Spinner from './../../components/Spinner/Spinner'
 
 const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
   const [email, setEmail] = useState('')
@@ -16,10 +17,13 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
   const [rePassword, setRePassword] = useState('')
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [isShowRePassword, setIsShowRePassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
 
   const navigate = useNavigate()
 
   const signUser = async e => {
+    setIsLoading(true)
     e.preventDefault()
     // TODO add password validation
     const isValidPassword = checkValidPassword()
@@ -31,6 +35,7 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
       console.log('current user: ', data)
       if (data.error) throw data.error
       if (data.result.email) {
+        setIsLoading(false)
         setLoggedUser(data.result)
         localStorage.setItem('notAccessToken', JSON.stringify(data.token))
         navigate('/drugs')
@@ -38,6 +43,7 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
     } catch (err) {
       console.log(err)
       setError(err)
+      setIsLoading(false)
     }
 
   }
@@ -113,6 +119,7 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
       <input type="submit" value={isSignup ? 'הירשם' : 'התחבר'} />
     </form>
     <div className="message">{error}</div>
+    { isLoading && <Spinner />}
   </div>
 }
 
