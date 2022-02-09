@@ -5,8 +5,9 @@ const drugController = {}
 
 
 drugController.addDrug = async (req,res) => {
+  console.log('entered addDrug func')
   try{
-    const { email,drugName,isWhenNeeded,unitAmount,times,timeUnit,notes, description } = await req.body
+    const { email,drugName,isWhenNeeded,unitAmount,times,timeUnit,notes,rxId, description } = await req.body
     const newMedicineObject = {
       drugName,
       isWhenNeeded,
@@ -14,23 +15,31 @@ drugController.addDrug = async (req,res) => {
       times,
       timeUnit,
       notes, 
+      rxId,
       description
     }
-    await Patient.findOne({email: email}, {$push: {medicins: {newMedicineObject}}})
+    const patient = await Patient.findOne({email: email})
+    console.log('patient @addDrug: ',patient)
+    patient.medicines.push(newMedicineObject)
+    await patient.save()
     res.send({success: 'ok'})
   } catch(err){
-    res.send({error: err})
+    res.status(400).send(err)
   }
 }
 
 drugController.deleteDrug = async (req,res) => {
-
   try {
     const { email, drugName } = await req.body
-    await   Patient.findOne({ email: email }, { $pull: { medicines: { drugName: drugName } }}, 
-      { safe: true, multi:true })
+    await Patient.updateOne({ email: email }, 
+      {"$pull": {"medicines": {drugName: drugName}}}, { safe:true, multi:true})
+    // patient.medicines.pull({drugName: drugName})
+    // Patient.updateOne({ email: email }, { "pull": { "medicines": { "drugName": drugName } }}, { safe: true, multi:true }, function(err, obj) {
+      //do something smart
+    res.end()
   }catch(err){
-    res.send({error: err})
+    console.log(err)
+    res.status(400).send({error: err})
   }
 }
 

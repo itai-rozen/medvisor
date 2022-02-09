@@ -24,7 +24,7 @@ const PatientSchema = new mongoose.Schema({
     },
     unitAmount: {
       type: Number,
-      min: 0
+      min:0
     },
     times: {
       type: Number,

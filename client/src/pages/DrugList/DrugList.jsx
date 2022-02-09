@@ -6,21 +6,29 @@ import AddDrug from '../../components/AddDrug/AddDrug'
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import './drugList.css'
 import { Consumer } from '../../components/Context'
+import Spinner from '../../components/Spinner/Spinner'
 
 const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
+
+  const [isLoading, setIsLoading] = useState(false)
   const deleteDrug = async drugName => {
+    setIsLoading(true)
     if (loggedUser.email) {
+      console.log('with backend')
       try {
         const { email } = loggedUser
         await axios.post('/api/drug/deleteDrug', { email, drugName })
         getUser()
       } catch (err) {
         console.log(err)
+        setIsLoading(false)
       }
     } else {
+      console.log('local')
       const { medicines } = loggedUser
-      setLoggedUser(...medicines.filter(medicine => medicine.drugName !== drugName))
+      setLoggedUser({ ...loggedUser, medicines: medicines.filter(medicine => medicine.drugName !== drugName) })
     }
+    setIsLoading(false)
   }
 
   return <Consumer >
@@ -60,7 +68,7 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
             (loggedUser?.medicines?.length > 0) && <Link to="/reminders">לניהול התזכורות</Link>
           }
 
-
+         {isLoading && <Spinner />} 
         </div>
     }
   </Consumer>

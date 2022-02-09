@@ -33,7 +33,9 @@ function App() {
     getToken(setTokenFound)
   }
 
-  const getUser = async email => {
+  const getUser = async () => {
+    if (loggedUser.email){
+      const { email } = loggedUser
     try {
       const { data } = await axios.post('/api/user', { email })
       console.log('data @getUser @App: ',data)
@@ -41,6 +43,8 @@ function App() {
     } catch(err){
       console.log(err)
     }
+  } else return
+  
   }
 
   const getMeds = async () => {

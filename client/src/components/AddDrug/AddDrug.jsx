@@ -4,6 +4,7 @@ import { Consumer } from '../Context'
 import axios from 'axios'
 import Button from './../Button/Button'
 import './addDrug.css'
+import Spinner from '../Spinner/Spinner';
 
 
 const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal }) => {
@@ -14,6 +15,8 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
   const [timeUnit, setTimeUnit] = useState('day')
   const [notes, setNotes] = useState('')
   const [error, setError] = useState('')
+  
+  const [isLoading,setIsLoading] = useState(false)
 
   const resetStates = () => {
     setDrugName('')
@@ -44,24 +47,29 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
         console.log('drug rxid @getDrugDescription @addDrug: ', rxId)
         const descriptionRes = await axios.get(`https://rxnav.nlm.nih.gov/REST/rxclass/class/byDrugName.json?drugName=${ingredientForApiFetching}&relaSource=MEDRT&relas=may_treat`)
         console.log('description res: ', descriptionRes)
-        const descriptionArr = descriptionRes.data?.rxclassDrugInfoList?.rxclassDrugInfo
+        const descriptionArr = descriptionRes.data?.rxclassDrugInfoList?.rxclassDrugInfo || []
         console.log('description arrat: ', descriptionArr)
         const description = descriptionArr.map(desc => desc.rxclassMinConceptItem?.className).join(',')
         console.log('drug description @getDrugDescription @addDrug: ', description)
 
         return { description, rxId }
       } catch (err) {
-        console.log(err)
+        setError(err.message)
+        setIsLoading(false)
       }
     }
   }
 
   const addDrug = async e => {
+    setIsLoading(true)
+
     e.preventDefault()
     const { description, rxId } = await getDrugDescription()
     console.log('description and rxid @handleSubmit @addDrug cpt: ', description, ' ', rxId)
     if (loggedUser.email) {
-      await axios.post('/addDrug', {
+      console.log('with backend')
+      try {
+      const res = await axios.post('/api/drug/addDrug', {
         email: loggedUser.email,
         drugName,
         isWhenNeeded,
@@ -72,11 +80,18 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
         rxId,
         description
       })
+      console.log('result @addDrug @addDrug: ', res)
       getUser()
+    }catch(err){
+      setError(err.messaage)
+      setIsLoading(false)
+    }
+
     } else {
+      console.log('local')
       const loggedUserCopy = { ...loggedUser }
       if (!loggedUserCopy.medicines) loggedUserCopy.medicines = []
-      if (loggedUser.medicines.find(med => med.drugName === drugName)) {
+      if (loggedUserCopy.medicines.find(med => med.drugName === drugName)) {
         setError('לא ניתן להזין את  אותה התרופה פעמיים')
         return
       }
@@ -93,8 +108,9 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
       console.log('logged user: ', loggedUserCopy)
       setLoggedUser(loggedUserCopy)
     }
-    setShowAddModal(false)
+    setIsLoading(false)
     resetStates()
+    setShowAddModal(false)
   }
 
 
@@ -181,6 +197,7 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
             <Button content="X" oncClickFunc={() => c.actions.setShowAddModal(false)} />
           </form>
           <div className="message">{error}</div>
+          {isLoading && <Spinner />}
         </div >
     }
   </Consumer >
