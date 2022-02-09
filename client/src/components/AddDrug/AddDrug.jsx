@@ -15,8 +15,8 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
   const [timeUnit, setTimeUnit] = useState('day')
   const [notes, setNotes] = useState('')
   const [error, setError] = useState('')
-  
-  const [isLoading,setIsLoading] = useState(false)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const resetStates = () => {
     setDrugName('')
@@ -61,31 +61,41 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
   }
 
   const addDrug = async e => {
-    setIsLoading(true)
-
     e.preventDefault()
+    setIsLoading(true)
+    console.log('drug name: ', drugName)
+    if (loggedUser.medicines.find(med => med.drugName === drugName)) {
+      setError('לא ניתן לבחור את אותה התרופה פעמיים')
+      setIsLoading(false)
+      return
+    }
+    if (!drugName){
+      setError('יש לבחור תרופה')
+      setIsLoading(false)
+      return
+    }
+
     const { description, rxId } = await getDrugDescription()
-    console.log('description and rxid @handleSubmit @addDrug cpt: ', description, ' ', rxId)
     if (loggedUser.email) {
       console.log('with backend')
       try {
-      const res = await axios.post('/api/drug/addDrug', {
-        email: loggedUser.email,
-        drugName,
-        isWhenNeeded,
-        unitAmount,
-        times,
-        timeUnit,
-        notes,
-        rxId,
-        description
-      })
-      console.log('result @addDrug @addDrug: ', res)
-      getUser()
-    }catch(err){
-      setError(err.messaage)
-      setIsLoading(false)
-    }
+        const res = await axios.post('/api/drug/addDrug', {
+          email: loggedUser.email,
+          drugName,
+          isWhenNeeded,
+          unitAmount,
+          times,
+          timeUnit,
+          notes,
+          rxId,
+          description
+        })
+        console.log('result @addDrug @addDrug: ', res)
+        getUser()
+      } catch (err) {
+        setError(err.messaage)
+        setIsLoading(false)
+      }
 
     } else {
       console.log('local')
@@ -126,6 +136,7 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
 
             <Autocomplete
               disablePortal
+              required
               id="combo-box-demo"
               options={c.drugStrs}
               sx={{ width: 300 }}
@@ -177,9 +188,9 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
                       label="תדירות"
                       onChange={e => setTimeUnit(e.target.value)}
                     >
-                      <MenuItem value={'day'}>כל יום</MenuItem>
-                      <MenuItem value={'week'}>כל שבוע</MenuItem>
-                      <MenuItem value={'month'}>כל חודש</MenuItem>
+                      <MenuItem value={'ביום'}>כל יום</MenuItem>
+                      <MenuItem value={'בשבוע'}>כל שבוע</MenuItem>
+                      <MenuItem value={'בחודש'}>כל חודש</MenuItem>
                     </Select>
                   </FormControl>
                   <TextField
@@ -195,8 +206,8 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
             </div>
             <input type="submit" value="הוסף תרופה" />
             <Button content="X" oncClickFunc={() => c.actions.setShowAddModal(false)} />
+            <div className="message">{error}</div>
           </form>
-          <div className="message">{error}</div>
           {isLoading && <Spinner />}
         </div >
     }

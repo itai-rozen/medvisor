@@ -11,20 +11,22 @@ import Spinner from '../../components/Spinner/Spinner'
 const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
 
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+
   const deleteDrug = async drugName => {
     setIsLoading(true)
     if (loggedUser.email) {
       console.log('with backend')
       try {
         const { email } = loggedUser
-        await axios.post('/api/drug/deleteDrug', { email, drugName })
+        const res = await axios.post('/api/drug/deleteDrug', { email, drugName })
+        if (res.error) throw res.error
         getUser()
       } catch (err) {
-        console.log(err)
+        setError(err)
         setIsLoading(false)
       }
     } else {
-      console.log('local')
       const { medicines } = loggedUser
       setLoggedUser({ ...loggedUser, medicines: medicines.filter(medicine => medicine.drugName !== drugName) })
     }

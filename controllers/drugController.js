@@ -24,7 +24,7 @@ drugController.addDrug = async (req,res) => {
     await patient.save()
     res.send({success: 'ok'})
   } catch(err){
-    res.status(400).send(err)
+    res.send({error:err})
   }
 }
 
@@ -33,13 +33,10 @@ drugController.deleteDrug = async (req,res) => {
     const { email, drugName } = await req.body
     await Patient.updateOne({ email: email }, 
       {"$pull": {"medicines": {drugName: drugName}}}, { safe:true, multi:true})
-    // patient.medicines.pull({drugName: drugName})
-    // Patient.updateOne({ email: email }, { "pull": { "medicines": { "drugName": drugName } }}, { safe: true, multi:true }, function(err, obj) {
-      //do something smart
-    res.end()
+
+    res.send({success: 'ok'})
   }catch(err){
-    console.log(err)
-    res.status(400).send({error: err})
+    res.send({error: err})
   }
 }
 
