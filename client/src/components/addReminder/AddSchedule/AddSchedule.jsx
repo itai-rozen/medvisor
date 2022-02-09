@@ -13,7 +13,19 @@ const AddSchedule = ({ index,timeUnit, setScheduleNumbers, scheduleNumbers }) =>
 
   const renderInputsObject = () => {
     if (timeUnit === 'day') {
-      return <input type="time" id="" onChange={e => updateSchedule(e.target.value)} />
+      return    <> <FormControl >
+        <InputLabel id="demo-simple-select-label">תדירות</InputLabel>
+      <Select
+        variant='standard'
+        // labelId="demo-simple-select-label"
+        // id="demo-simple-select"
+        value={timeUnit}
+        label="שעה"
+        onChange={e => updateSchedule(e.target.value)}
+      >
+        {[...Array(24)].map((_, i) => <MenuItem key={i} value={i}>{i}:00</MenuItem>)}
+      </Select>
+    </FormControl></>
     } else if (timeUnit === 'week') {
       return <> <FormControl >
         <InputLabel id="demo-simple-select-label">תדירות</InputLabel>

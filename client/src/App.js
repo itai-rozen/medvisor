@@ -15,42 +15,54 @@ import './App.css';
 function App() {
 
   const [drugList, setDrugList] = useState([])
-  const [drugStrs,setDrugStrs] = useState([])
+  const [drugStrs, setDrugStrs] = useState([])
   const [show, setShow] = useState(false);
-  const [notification, setNotification] = useState({title: '', body: ''});
+  const [notification, setNotification] = useState({ title: '', body: '' });
   const [isTokenFound, setTokenFound] = useState(false);
   const [loggedUser, setLoggedUser] = useState({})
   const [isSignup, setIsSignup] = useState(false)
+  const [reminders, setReminders] = useState([])
   const [showAddModal, setShowAddModal] = useState(false)
 
   onMessageListener().then(payload => {
     setShow(true);
-    setNotification({title: payload.notification.title, body: payload.notification.body})
+    setNotification({ title: payload.notification.title, body: payload.notification.body })
     console.log(payload);
   }).catch(err => console.log('failed: ', err));
 
-  const messagingFirebase =  () => {
+  const messagingFirebase = () => {
     getToken(setTokenFound)
   }
 
+  const getReminders = async () => {
+    const { data } = await axios.get('/api/reminder')
+    console.log('reminders data @App: ',data)
+  }
+
   const getUser = async () => {
-    if (loggedUser.email){
+    if (loggedUser.email) {
       const { email } = loggedUser
+      try {
+        const { data } = await axios.post('/api/user', { email })
+        console.log('data @getUser @App: ', data)
+        setLoggedUser(data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
+
+
+
+  const getMeds = async () => {
     try {
-      const { data } = await axios.post('/api/user', { email })
-      console.log('data @getUser @App: ',data)
-      setLoggedUser(data)
+
+      const result = await axios.get('/api')
+      setDrugList(result.data)
+      spreadDrugObjs(result.data)
     } catch(err){
       console.log(err)
     }
-  } else return
-  
-  }
-
-  const getMeds = async () => {
-    const result = await axios.get('/api')
-    setDrugList(result.data)
-    spreadDrugObjs(result.data)
   }
 
   const spreadDrugObjs = drugList => {
@@ -64,12 +76,17 @@ function App() {
 
 
   useEffect(() => {
-    getMeds()    
+    getMeds()
   }, [])
+  
+  useEffect(() => {
+    getReminders()
+  },[loggedUser])
+
   return <Provider value={
     {
       isSignup,
-      drugList ,
+      drugList,
       drugStrs,
       loggedUser,
       showAddModal,
@@ -86,7 +103,7 @@ function App() {
         <Route path="/" element={<About setIsSignup={setIsSignup} />} />
         <Route path="/auth" element={<Auth setLoggedUser={setLoggedUser} isSignup={isSignup} setIsSignup={setIsSignup} />} />
         <Route path="/drugs" element={<DrugList getUser={getUser} setLoggedUser={setLoggedUser} loggedUser={loggedUser} />} />
-        <Route path="/reminders" element={<ReminderList loggedUser={loggedUser} />} />
+        <Route path="/reminders" element={<ReminderList getReminders={getReminders} loggedUser={loggedUser} />} />
       </Routes>
     </BrowserRouter>
   </Provider>

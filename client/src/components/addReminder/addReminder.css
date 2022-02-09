@@ -25,5 +25,8 @@
   display: flex;
 }
 
+.med-item  { 
+  direction: ltr;
+}
 
 

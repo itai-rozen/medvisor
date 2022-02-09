@@ -6,19 +6,10 @@ const ReminderSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  medicines: [{
-    drugName: {
-      type: String,
-      required: true
-    }
-  }],
+  medicines: [String],
   schedule: {
     type: String,
     required: true
-  },
-  dates: {
-    type: Array,
-    default: undefined
   }
 })
 

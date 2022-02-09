@@ -36,8 +36,7 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
         drug.drugEngTitle === drugName ||
         drug.activeIngredient === drugName) return drug
     })
-    // TODO see if this function fetches the id correctly, add it to the medicine object and
-    // continue with fetching the description!
+
     if (chosenDrug.activeIngredient) {
       const { activeIngredient } = chosenDrug
       const ingredientForApiFetching = activeIngredient?.split(' ')?.join('+')
@@ -47,6 +46,7 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
         console.log('drug rxid @getDrugDescription @addDrug: ', rxId)
         const descriptionRes = await axios.get(`https://rxnav.nlm.nih.gov/REST/rxclass/class/byDrugName.json?drugName=${ingredientForApiFetching}&relaSource=MEDRT&relas=may_treat`)
         console.log('description res: ', descriptionRes)
+        // TODO keep only unique values with set
         const descriptionArr = descriptionRes.data?.rxclassDrugInfoList?.rxclassDrugInfo || []
         console.log('description arrat: ', descriptionArr)
         const description = descriptionArr.map(desc => desc.rxclassMinConceptItem?.className).join(',')

@@ -10,7 +10,7 @@ import Spinner from './../../components/Spinner/Spinner'
 import axios from 'axios'
 import './addReminder.css'
 
-const AddReminder = ({ setShowReminderModal, reminders, setReminders }) => {
+const AddReminder = ({ setShowReminderModal, email }) => {
   const [medicines, setMedicines] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [timeUnit, setTimeUnit] = useState('')
@@ -19,7 +19,13 @@ const AddReminder = ({ setShowReminderModal, reminders, setReminders }) => {
   const [scheduleTime, setScheduleTime] = useState('')
   const [error, setError] = useState('')
 
-  const addMedToReminderList = medName => setMedicines([...medicines, medName])
+  const addMedToReminderList = (medName,amount) => {
+    if (medicines.find(med => med === `${medName} x ${amount}`)){
+      setError('לא ניתן לבחור את אותה תרופה פעמיים')
+      return
+    }
+    setMedicines([...medicines, `${medName} x ${amount}`])
+  }
   const removeMedFromList = medName => setMedicines(medicines.filter(med => med !== medName))
   const resetError = () => setError('')
 
@@ -32,8 +38,8 @@ const AddReminder = ({ setShowReminderModal, reminders, setReminders }) => {
 
   const checkErrors = () => {
     let errorString = ''
-    if (!medicines.length > 0) errorString ='יש לבחור תרופה אחת לפחות'      
-    if (!timeUnit) errorString= 'יש לבחור תדירות רצויה' 
+    if (!medicines.length > 0) errorString = 'יש לבחור תרופה אחת לפחות'
+    if (!timeUnit) errorString = 'יש לבחור תדירות רצויה'
     if (scheduleNumbers.every(num => !num)) errorString = 'יש לבחור ימים ושעות לקבלת התזכורת'
     if (timeUnit !== 'day' && !scheduleTime) errorString = 'יש לבחור שעה לקבלת התזכורת'
     setError(errorString)
@@ -43,42 +49,42 @@ const AddReminder = ({ setShowReminderModal, reminders, setReminders }) => {
   const addReminder = () => {
     const isErrors = checkErrors()
     console.log('errors? ', isErrors)
-    // if (isErrors) return
-    const reminderDetails = {
-      medicines,
-      timeUnit,
-      scheduleNumbers,
-      scheduleTime
-    }
+    if (isErrors) return
+    // email,
+    // medicines,
+    // timeUnit,
+    // scheduleNumbers,
+    // scheduleTime
     const scheduleString = generateScheduleString()
+    console.log('schedule string: ', scheduleString)
     setReminder(scheduleString)
-    console.log('reminder details : ', reminderDetails)
   }
 
   const generateScheduleString = () => {
     let scheduleStr = ''
-    if (timeUnit === 'day'){
-      scheduleStr = ``
-    } else {
-      scheduleStr = ``
-    }
+    console.log('time unit: ', timeUnit)
+    console.log('schedule numbers:', scheduleNumbers)
+    console.log('schedule times: ', scheduleTime)
+    if (timeUnit === 'day') {
+      // * * * * *
+      scheduleStr = `* ${scheduleNumbers.join()} * * *`
+    } else if (timeUnit === 'week') {
+      scheduleStr = `* ${scheduleTime} * * ${scheduleNumbers.join()}`
+    } else scheduleStr = `* ${scheduleTime} ${scheduleNumbers.join()} * *`
     return scheduleStr
   }
 
   const setReminder = async str => {
-    const reminderDetails = {
-      medicines,
-      timeUnit,
-      scheduleNumbers,
-      scheduleTime
-    }
+  
     try {
       setIsLoading(true)
-      const res = await axios.post('/api/reminder', { details: reminderDetails})
+      const res = await axios.post('/api/reminder', { email,medicines,schedule:str })
       setIsLoading(false)
-    } catch(err){
+      setShowReminderModal(false)
+    } catch (err) {
       setError(err.error)
       setIsLoading(false)
+
     }
   }
 
@@ -99,15 +105,15 @@ const AddReminder = ({ setShowReminderModal, reminders, setReminders }) => {
               <div className="patient-mesications">
                 <ul className="med-list">
                   {c.loggedUser.medicines.map(med => {
-                    return <li key={med.drugName} onClick={() => addMedToReminderList(med.drugName)}>{med.drugName}</li>
+                    return <li className='med-item' key={med.drugName} onClick={() => addMedToReminderList(med.drugName,med.unitAmount)}>{med.drugName} x {med.unitAmount}</li>
                   })}
                 </ul>
               </div>
               <div className="reminder-medications">
                 <h4><AccessAlarmIcon /></h4>
-                <ul className="reminder-medication-list">
+                <ul className="reminder-medication-list med-list">
                   {medicines.map(medicine => {
-                    return <li key={medicine} onClick={() => removeMedFromList(medicine)}>{medicine}</li>
+                    return <li className="med-item" key={medicine} onClick={() => removeMedFromList(medicine)}>{medicine}</li>
                   })}
                 </ul>
               </div>
@@ -147,18 +153,18 @@ const AddReminder = ({ setShowReminderModal, reminders, setReminders }) => {
                   index={i}
                   scheduleNumbers={scheduleNumbers}
                   setScheduleNumbers={setScheduleNumbers}
-                  timeUnit={timeUnit}                  
+                  timeUnit={timeUnit}
                 />)
               }
               {
-                timeUnit !== 'day' && (times>0) && timeUnit && <input type="time" onChange={e =>setScheduleTime(e.target.value)} id="" />
+                timeUnit !== 'day' && (times > 0) && timeUnit && <input type="time" onChange={e => setScheduleTime(e.target.value)} id="" />
               }
               <h5>התזכורות יישלחו למייל איתו נרשמת.</h5>
             </div>
             <div className="add-reminder" onClick={() => addReminder()} >הוסף תזכורת</div>
             <div className="error-message">{error}</div>
           </div>
-          { isLoading && <Spinner />}
+          {isLoading && <Spinner />}
         </div>
     }
   </Consumer>

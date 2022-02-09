@@ -11,7 +11,7 @@ const ReminderList = ({loggedUser}) => {
   return <div className="reminders-container">
 
     {(loggedUser.medicines?.length > 0) && <Button  content="קבע תזכורת" oncClickFunc={() => setShowReminderModal(true)} />}
-    {showReminderModal && <AddReminder reminders={reminders} setReminders={setReminders} setShowReminderModal={setShowReminderModal} />}
+    {showReminderModal && <AddReminder email={loggedUser.email}  setShowReminderModal={setShowReminderModal} />}
     <Link to="/drugs">חזרה לרשימת התרופות</Link>
   </div>
 }
