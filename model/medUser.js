@@ -15,8 +15,7 @@ const PatientSchema = new mongoose.Schema({
   },
   medicines: [{
     drugName: {
-      type: String,
-      unique: true
+      type: String
     },
     isWhenNeeded: {
       type: Boolean,

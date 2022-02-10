@@ -19,11 +19,11 @@ drugController.addDrug = async (req,res) => {
       description
     }
     const patient = await Patient.findOne({email: email})
-    console.log('patient @addDrug: ',patient)
     patient.medicines.push(newMedicineObject)
     await patient.save()
     res.send({success: 'ok'})
   } catch(err){
+     console.log('error @addDrug: ',err)
     res.send({error:err})
   }
 }

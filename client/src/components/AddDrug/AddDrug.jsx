@@ -63,13 +63,12 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
   const addDrug = async e => {
     e.preventDefault()
     setIsLoading(true)
-    console.log('drug name: ', drugName)
     if (loggedUser.medicines.find(med => med.drugName === drugName)) {
       setError('לא ניתן לבחור את אותה התרופה פעמיים')
       setIsLoading(false)
       return
     }
-    if (!drugName){
+    if (!drugName) {
       setError('יש לבחור תרופה')
       setIsLoading(false)
       return
@@ -79,6 +78,8 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
     if (loggedUser.email) {
       console.log('with backend')
       try {
+        drugName = (drugName === "פוזיד טבליות") ? 'פוזיד 40' : drugName
+        console.log('drug name: ', drugName)
         const res = await axios.post('/api/drug/addDrug', {
           email: loggedUser.email,
           drugName,

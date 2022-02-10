@@ -4,7 +4,6 @@ import axios from 'axios'
 import { Provider } from './components/Context'
 import Navbar from './components/Navbar/Navbar';
 import About from './pages/About/About';
-import { getToken, onMessageListener } from './firebase';
 import Auth from './pages/Auth/Auth';
 import DrugList from './pages/DrugList/DrugList';
 import ReminderList from './pages/ReminderList/ReminderList';
@@ -16,27 +15,15 @@ function App() {
 
   const [drugList, setDrugList] = useState([])
   const [drugStrs, setDrugStrs] = useState([])
-  const [show, setShow] = useState(false);
-  const [notification, setNotification] = useState({ title: '', body: '' });
-  const [isTokenFound, setTokenFound] = useState(false);
   const [loggedUser, setLoggedUser] = useState({})
   const [isSignup, setIsSignup] = useState(false)
   const [reminders, setReminders] = useState([])
   const [showAddModal, setShowAddModal] = useState(false)
 
-  onMessageListener().then(payload => {
-    setShow(true);
-    setNotification({ title: payload.notification.title, body: payload.notification.body })
-    console.log(payload);
-  }).catch(err => console.log('failed: ', err));
-
-  const messagingFirebase = () => {
-    getToken(setTokenFound)
-  }
 
   const getReminders = async () => {
     const { data } = await axios.get('/api/reminder')
-    console.log('reminders data @App: ',data)
+    setReminders(data)
   }
 
   const getUser = async () => {
@@ -103,7 +90,7 @@ function App() {
         <Route path="/" element={<About setIsSignup={setIsSignup} />} />
         <Route path="/auth" element={<Auth setLoggedUser={setLoggedUser} isSignup={isSignup} setIsSignup={setIsSignup} />} />
         <Route path="/drugs" element={<DrugList getUser={getUser} setLoggedUser={setLoggedUser} loggedUser={loggedUser} />} />
-        <Route path="/reminders" element={<ReminderList getReminders={getReminders} loggedUser={loggedUser} />} />
+        <Route path="/reminders" element={<ReminderList getReminders={getReminders} reminders={reminders} loggedUser={loggedUser} />} />
       </Routes>
     </BrowserRouter>
   </Provider>

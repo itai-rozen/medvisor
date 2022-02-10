@@ -50,11 +50,6 @@ const AddReminder = ({ setShowReminderModal, email }) => {
     const isErrors = checkErrors()
     console.log('errors? ', isErrors)
     if (isErrors) return
-    // email,
-    // medicines,
-    // timeUnit,
-    // scheduleNumbers,
-    // scheduleTime
     const scheduleString = generateScheduleString()
     console.log('schedule string: ', scheduleString)
     setReminder(scheduleString)

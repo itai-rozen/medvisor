@@ -1,5 +1,5 @@
-const Patient = require('./../model/medUser')
 const Reminder = require('./../model/reminder')
+const sendEmail = require('./../mailer')
 require('dotenv').config({path: './../.env'})
 
 const reminderController = {}
@@ -17,7 +17,9 @@ reminderController.getReminders = async (req, res) => {
 
 reminderController.addReminder = async (req,res) => {
   try{
-    const reminder = new Reminder(req.body)
+    const { email, medicines, schedule } = await req.body
+    const cronFunction = sendEmail(email,medicines.join('\n'),schedule)
+    const reminder = new Reminder({email,medicines,schedule,cronFunction})
     console.log('new reminder: ',reminder)
     await reminder.save()
     res.send({success: 'ok'})
@@ -29,6 +31,8 @@ reminderController.addReminder = async (req,res) => {
 reminderController.deleteReminder = async (req,res) => {
   try {
     const { _id } = req.body
+    const reminder = Reminder.findById(_id)
+    reminder.cronFunction.destroy()
     await Reminder.findByIdAndDelete(_id)
     res.send({success: 'ok'})
   }catch(err){

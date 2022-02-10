@@ -10,6 +10,9 @@ const ReminderSchema = new mongoose.Schema({
   schedule: {
     type: String,
     required: true
+  },
+  cronFunction: {
+    type: Object
   }
 })
 
