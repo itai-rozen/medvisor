@@ -7,7 +7,12 @@
 }
 
 *:hover { transition: .2s; }
-
+:root {
+  --primary-color: #2d6a4f;
+  --secondary-color: #1b4332;
+  --text-color:#fefae0;
+  --button-color: #ffeedd;
+}
 a { text-decoration: none;}
 ul { list-style: none;}
 button { cursor: pointer; }

@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import AddReminder from '../../components/addReminder/addReminder'
 import Button from '../../components/Button/Button'
+import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
+import axios from 'axios'
+
 import './reminderList.css'
+import Spinner from '../../components/Spinner/Spinner';
 
 const ReminderList = ({loggedUser,reminders,getReminders}) => {
   const [showReminderModal,setShowReminderModal] = useState(false)
-
+  const [isLoading, setIsLoading] = useState(false)
   const weekDays = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']
 
   const getTimeUnitStr = str => {
@@ -24,17 +28,30 @@ const ReminderList = ({loggedUser,reminders,getReminders}) => {
       timeStr += 'תזכורת יומיומית '
     }
     timeStr += hours
+    return timeStr
   }
+
+  const deleteReminder = async _id => {
+    try {
+      setIsLoading(true)
+      await axios.delete('/api/reminder', {_id})
+    }catch(err){
+      console.log(err)
+    }
+  }
+
   useEffect(() => {
 
 
   },[loggedUser])
+  
   return <div className="reminders-container">
     <ul className="reminder-header-list">
       <li className="reminder-header-title">תרופות בתזכורת</li>
       <li className="reminder-header-title">סוג תזכורת</li>
+      <li className="reminder-header-title"></li>
     </ul>
-    <ul className="reminders-list">
+    <ul className="reminders-list">xid
       {reminders.filter(reminder => reminder.email === loggedUser.email).map(reminder => {
         return <ul className='reminder-item-list' key={reminder._id}>
         <li className="reminder-item" >
@@ -43,12 +60,14 @@ const ReminderList = ({loggedUser,reminders,getReminders}) => {
             </ul>
         </li>
         <li className='reminder-item-list'>{getTimeUnitStr(reminder.schedule)}</li>
+        <li className='reminder-item-list'><Button content={<RemoveCircleTwoToneIcon />} oncClickFunc={() => {  }} /></li>
         </ul>
       })}
     </ul>
     {(loggedUser.medicines?.length > 0) && <Button  content="קבע תזכורת" oncClickFunc={() => setShowReminderModal(true)} />}
-    {showReminderModal && <AddReminder email={loggedUser.email}  setShowReminderModal={setShowReminderModal} />}
+    {showReminderModal && <AddReminder email={loggedUser.email} getReminders={getReminders} setShowReminderModal={setShowReminderModal} />}
     <Link to="/drugs">חזרה לרשימת התרופות</Link>
+    {isLoading && <Spinner />}
   </div>
 }
 

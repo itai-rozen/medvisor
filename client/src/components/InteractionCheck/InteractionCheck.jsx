@@ -26,7 +26,7 @@ const InteractionCheck = ({ medicines, setShowInteractionsModal }) => {
   const fetchInteractions = async () => {
     try {
       setIsLoading(true)
-      const { data } = await axios.get(`https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=${rxString}`)
+      const { data } = await axios.get(` ${rxString}`)
       console.log('interactions: ',data)
       const interactionPairArr = data?.fullInteractionTypeGroup[0].fullInteractionType
       console.log('interaction pair array: ', interactionPairArr)

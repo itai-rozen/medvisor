@@ -10,7 +10,7 @@ import Spinner from './../../components/Spinner/Spinner'
 import axios from 'axios'
 import './addReminder.css'
 
-const AddReminder = ({ setShowReminderModal, email }) => {
+const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
   const [medicines, setMedicines] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [timeUnit, setTimeUnit] = useState('')
@@ -19,12 +19,12 @@ const AddReminder = ({ setShowReminderModal, email }) => {
   const [scheduleTime, setScheduleTime] = useState('')
   const [error, setError] = useState('')
 
-  const addMedToReminderList = (medName,amount) => {
-    if (medicines.find(med => med === `${medName} x ${amount}`)){
+  const addMedToReminderList = (times,medName,amount) => {
+    if (medicines.find(med => med === `${times} x ${medName} x ${amount}`)){
       setError('לא ניתן לבחור את אותה תרופה פעמיים')
       return
     }
-    setMedicines([...medicines, `${medName} x ${amount}`])
+    setMedicines([...medicines, `${times} x ${medName} x ${amount}`])
   }
   const removeMedFromList = medName => setMedicines(medicines.filter(med => med !== medName))
   const resetError = () => setError('')
@@ -48,7 +48,6 @@ const AddReminder = ({ setShowReminderModal, email }) => {
 
   const addReminder = () => {
     const isErrors = checkErrors()
-    console.log('errors? ', isErrors)
     if (isErrors) return
     const scheduleString = generateScheduleString()
     console.log('schedule string: ', scheduleString)
@@ -61,7 +60,6 @@ const AddReminder = ({ setShowReminderModal, email }) => {
     console.log('schedule numbers:', scheduleNumbers)
     console.log('schedule times: ', scheduleTime)
     if (timeUnit === 'day') {
-      // * * * * *
       scheduleStr = `* ${scheduleNumbers.join()} * * *`
     } else if (timeUnit === 'week') {
       scheduleStr = `* ${scheduleTime} * * ${scheduleNumbers.join()}`
@@ -75,6 +73,7 @@ const AddReminder = ({ setShowReminderModal, email }) => {
       setIsLoading(true)
       const res = await axios.post('/api/reminder', { email,medicines,schedule:str })
       setIsLoading(false)
+      getReminders()
       setShowReminderModal(false)
     } catch (err) {
       setError(err.error)
@@ -100,7 +99,7 @@ const AddReminder = ({ setShowReminderModal, email }) => {
               <div className="patient-mesications">
                 <ul className="med-list">
                   {c.loggedUser.medicines.map(med => {
-                    return <li className='med-item' key={med.drugName} onClick={() => addMedToReminderList(med.drugName,med.unitAmount)}>{med.drugName} x {med.unitAmount}</li>
+                    return <li className='med-item' key={med.drugName} onClick={() => addMedToReminderList(med.times,med.drugName,med.unitAmount)}>{med.times} x {med.drugName} x {med.unitAmount}</li>
                   })}
                 </ul>
               </div>

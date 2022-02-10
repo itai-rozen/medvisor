@@ -56,7 +56,10 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
       } catch (err) {
         setError(err.message)
         setIsLoading(false)
+        return { description: 'N/A', rxId: '' }
       }
+    } else {
+      return { description: 'N/A', rxId: '' }
     }
   }
 
@@ -78,8 +81,6 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
     if (loggedUser.email) {
       console.log('with backend')
       try {
-        drugName = (drugName === "פוזיד טבליות") ? 'פוזיד 40' : drugName
-        console.log('drug name: ', drugName)
         const res = await axios.post('/api/drug/addDrug', {
           email: loggedUser.email,
           drugName,
@@ -123,11 +124,6 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
     resetStates()
     setShowAddModal(false)
   }
-
-
-  useEffect(() => {
-
-  }, [])
 
   return <Consumer>
     {

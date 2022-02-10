@@ -23,6 +23,7 @@ function App() {
 
   const getReminders = async () => {
     const { data } = await axios.get('/api/reminder')
+    console.log('reminders: ',data)
     setReminders(data)
   }
 
