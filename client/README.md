@@ -49,11 +49,14 @@ still need to improve the active ingredient property. sometimes the ingredient c
 made a lot of AUTH today. implemented bcrypt & jwt. jwt has not yet been completely implemented but for now its sufficient. thought a lot about what is the best way to add reminders to the user's medicine array. At first i thought every med should have its own reminder set, then I decided it should be managed only at the drug list page and should gather the relevant meds to a whole reminder.
 found a great library to schedule email sending on time increments called CRON.
 
-## captain's log 9.2.22
+### captain's log 9.2.22
 dear diary,
 ok, medicine list is functional! for both subsribed user & unsubscribed (the difference is the first's data will be stored in mongo and the second will disappear on refresh). still looks awfull but it works! had to struggle a bit with adding and removing from nested array in a mongoose Schema.
 I added the reminder component, and its been harder than i imagined. There are a lot of things i needed to take into account.
 Also i changed the structure of the schema and now there are two separate schemas for users & reminders. I figured it has more logic to put all reminders in one schema and filter them to the user via user email. In that way, when i'll set up the scheduled email functions it will have only one place to look scheduled info from;
+
+### captain's log 10.2.22
+Ok so everything seems to be working, but its still ugly af. gonna spend some serious time making it look decent. Also, im very excited because its 7:00pm and thats the time i set to get an Email reminder on medicines..AND IT WORKED!!! was really doubtful Oh wait a minute.. it sends me the email every minute LoL. I guess I scheduled it to send it to me at 7pm but at EVERY MINUTE of 7pm. Needs tweaking.
 
 # Getting Started with Create React App
 

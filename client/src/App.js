@@ -16,14 +16,13 @@ function App() {
   const [drugList, setDrugList] = useState([])
   const [drugStrs, setDrugStrs] = useState([])
   const [loggedUser, setLoggedUser] = useState({})
-  const [isSignup, setIsSignup] = useState(false)
+  const [isSignup, setIsSignup] = useState(true)
   const [reminders, setReminders] = useState([])
   const [showAddModal, setShowAddModal] = useState(false)
 
-
   const getReminders = async () => {
     const { data } = await axios.get('/api/reminder')
-    console.log('reminders: ',data)
+    console.log('reminders: ', data)
     setReminders(data)
   }
 
@@ -44,11 +43,10 @@ function App() {
 
   const getMeds = async () => {
     try {
-
       const result = await axios.get('/api')
       setDrugList(result.data)
       spreadDrugObjs(result.data)
-    } catch(err){
+    } catch (err) {
       console.log(err)
     }
   }
@@ -66,10 +64,10 @@ function App() {
   useEffect(() => {
     getMeds()
   }, [])
-  
+
   useEffect(() => {
     getReminders()
-  },[loggedUser])
+  }, [loggedUser])
 
   return <Provider value={
     {
@@ -82,6 +80,7 @@ function App() {
         getUser,
         setLoggedUser,
         setShowAddModal
+        
       }
     }
   }>

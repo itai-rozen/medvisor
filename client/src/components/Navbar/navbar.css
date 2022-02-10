@@ -1,13 +1,36 @@
-.user-nav-container {
+.nav-container {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-around;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   font-size: 2rem;
   height: 10vh;
   direction: rtl;
+  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+  color: var(--text-color);
+}
+
+.nav-container > * {
+  margin: 0 10px;
+}
+.greeting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5px;
 }
 
 .btn-container {
   justify-self: flex-start;
+}
+
+nav a:hover {
+text-shadow: 0 0 5px #FFF,
+ 0 0 10px #FFF, 
+ 0 0 15px #FFF, 
+ 0 0 20px var(--primary-color), 
+ 0 0 30px var(--primary-color), 
+ 0 0 40px var(--primary-color), 
+ 0 0 55px var(--primary-color), 
+ 0 0 75px var(--primary-color);
 }

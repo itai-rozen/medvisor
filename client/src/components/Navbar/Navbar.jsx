@@ -12,32 +12,34 @@ const Navbar = ({ loggedUser, setIsSignup, setLoggedUser }) => {
     navigate('/')
   }
 
-  const renderContent = () => {
-    return <div className="user-nav-container">
-      <div className="greeting">
-        <span>שלום&nbsp; </span>
-        {loggedUser.email ? loggedUser.name : 'אורח'}
-      </div>
-      {loggedUser.email ?
-        <>
-          <Link to="/drugs">לרשימת התרופות שלך</Link>
-          <Button content="התנתק" oncClickFunc={logOut} />
-        </>
-        :
-        <>
-        <div className="btn-container">
-          <Button oncClickFunc={() => updateSignStatusAndRedirect(true)} content="הירשם" />
-          <Button oncClickFunc={() => updateSignStatusAndRedirect(false)} content="התחבר" />
-        </div>
-        <Link to="/drugs">צור רשימת תרופות</Link>
-        </>}
-    </div>
-  }
-
   const updateSignStatusAndRedirect = isSign => {
     setIsSignup(isSign)
     navigate('/auth')
   }
+  const renderContent = () => {
+    return <nav className="nav-container">
+      <div className="greeting">
+       שלום, 
+        {loggedUser.email ? loggedUser.name : '  אורח'}
+
+        <>
+        {loggedUser.email ?
+          <Button content="התנתק" oncClickFunc={logOut} />
+          :
+        <div className="btn-container">
+          <Button oncClickFunc={() => updateSignStatusAndRedirect(true)} content="הירשם" />
+          <Button oncClickFunc={() => updateSignStatusAndRedirect(false)} content="התחבר" />
+        </div>
+        }
+        </>
+      </div>
+      
+      <Link to="/drugs">{loggedUser.email ? 'לרשימת התרופות' : 'צור רשימת תרופות'}</Link>
+
+    </nav>
+  }
+
+
 
 
   return <nav className='nav'>

@@ -18,6 +18,8 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [isShowRePassword, setIsShowRePassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [is8Chars, setIs8Chars] = useState(false)
+  const [is1Letter, setIs1Letter] = useState(false)
 
 
   const navigate = useNavigate()
@@ -47,7 +49,11 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
     }
 
   }
-
+  const updatePassword = value => {
+    setPassword(value)
+    setIs8Chars((value.length > 7))
+    setIs1Letter(/[a-z]/i.test(value))
+  }
   const checkValidPassword = () => {
 
   }
@@ -76,14 +82,18 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
         type="email"
         required />
       <div className="password-wrapper">
-        <div className="password-validations"></div>
         <div className="passwords-container">
-
+          {
+            isSignup && <div className="password-validations" >
+              <p className={`eight-char validation ${is8Chars && "valid"}`}>הסיסמה צריכה להכיל לפחות 8 תווים</p>
+              <p className={`one-letter validation ${is1Letter && "valid"}`}>הסיסמה צריכה להכיל לפחות אות אחת</p>
+            </div>
+          }
           <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
             <InputLabel htmlFor="standard-adornment-password">סיסמה</InputLabel>
             <Input
               id="standard-adornment-password" type={isShowPassword ? 'text' : 'password'}
-              value={password} onChange={e => setPassword(e.target.value)}
+              value={password} onChange={e => updatePassword(e.target.value)}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton aria-label="toggle password visibility" onClick={() => setIsShowPassword(!isShowPassword)}
@@ -117,9 +127,10 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
         </div>
       </div>
       <input type="submit" value={isSignup ? 'הירשם' : 'התחבר'} />
+
     </form>
     <div className="message">{error}</div>
-    { isLoading && <Spinner />}
+    {isLoading && <Spinner />}
   </div>
 }
 

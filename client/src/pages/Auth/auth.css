@@ -18,6 +18,47 @@
 }
 
 .passwords-container {
+  position: relative;
   display: flex;
   flex-direction: column;
+}
+
+.password-validations {
+  direction: rtl;
+  position: absolute;
+  width: 250px;
+  left: 230px;
+  top: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 10px 15px 10px 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius);
+}
+
+.validation {
+  position: relative;
+  color: red;
+  padding: 0 5px;
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+.validation::before {
+  position: absolute;
+  color: red;
+  right: -10px;
+  bottom: 1px;
+  content: "✗";
+}
+
+.validation.valid {
+  color: green;
+}
+
+.validation.valid .validation::before  {
+  content: '✓';
+  color: green;
 }

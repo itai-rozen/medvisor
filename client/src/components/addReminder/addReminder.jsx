@@ -18,13 +18,12 @@ const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
   const [scheduleNumbers, setScheduleNumbers] = useState([])
   const [scheduleTime, setScheduleTime] = useState('')
   const [error, setError] = useState('')
-
   const addMedToReminderList = (times,medName,amount) => {
-    if (medicines.find(med => med === `${times} x ${medName} x ${amount}`)){
+    if (medicines.find(med => med === `${amount} יחידות  מהתרופה ${medName} - `)){
       setError('לא ניתן לבחור את אותה תרופה פעמיים')
       return
     }
-    setMedicines([...medicines, `${times} x ${medName} x ${amount}`])
+    setMedicines([...medicines, `${amount} יחידות  מהתרופה ${medName} - `])
   }
   const removeMedFromList = medName => setMedicines(medicines.filter(med => med !== medName))
   const resetError = () => setError('')
@@ -60,10 +59,10 @@ const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
     console.log('schedule numbers:', scheduleNumbers)
     console.log('schedule times: ', scheduleTime)
     if (timeUnit === 'day') {
-      scheduleStr = `* ${scheduleNumbers.join()} * * *`
+      scheduleStr = `0 ${scheduleNumbers.join()} * * *`
     } else if (timeUnit === 'week') {
-      scheduleStr = `* ${scheduleTime} * * ${scheduleNumbers.join()}`
-    } else scheduleStr = `* ${scheduleTime} ${scheduleNumbers.join()} * *`
+      scheduleStr = `0 ${scheduleTime} * * ${scheduleNumbers.join()}`
+    } else scheduleStr = `0 ${scheduleTime} ${scheduleNumbers.join()} * *`
     return scheduleStr
   }
 
