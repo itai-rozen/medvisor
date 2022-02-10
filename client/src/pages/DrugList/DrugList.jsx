@@ -4,6 +4,7 @@ import Button from './../../components/Button/Button'
 import axios from 'axios'
 import AddDrug from '../../components/AddDrug/AddDrug'
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
+import InteractionCheck from '../../components/InteractionCheck/InteractionCheck'
 import './drugList.css'
 import { Consumer } from '../../components/Context'
 import Spinner from '../../components/Spinner/Spinner'
@@ -12,11 +13,11 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showInteractionsModal, setShowInteractionsModal] = useState(false)
 
   const deleteDrug = async drugName => {
     setIsLoading(true)
     if (loggedUser.email) {
-      console.log('with backend')
       try {
         const { email } = loggedUser
         const res = await axios.post('/api/drug/deleteDrug', { email, drugName })
@@ -42,7 +43,7 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
 
             <ul className="medicine-headers list">
               <li className='header-item'>שם התרופה</li>
-              <li className='header-item'>לפי הצורך</li>
+              <li className='header-item'>משטר נטילה</li>
               <li className='header-item'>יחידות בכל נטילה</li>
               <li className='header-item'>פעמים</li>
               <li className='header-item'>תדירות</li>
@@ -54,7 +55,7 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
               const { drugName, isWhenNeeded, unitAmount, times, timeUnit, notes, description } = medicine
               return <ul className="medicine-details-list list" key={drugName}>
                 <li className="medicine-details-item">{drugName}</li>
-                <li className="medicine-details-item">{isWhenNeeded}</li>
+                <li className="medicine-details-item">{isWhenNeeded ? 'לפי הצורך':'באופן קבוע'}</li>
                 <li className="medicine-details-item">{unitAmount}</li>
                 <li className="medicine-details-item">{times}</li>
                 <li className="medicine-details-item">{timeUnit}</li>
@@ -67,7 +68,13 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
           <Button content="הוסף תרופה" oncClickFunc={() => c.actions.setShowAddModal(true)} />
           {c.showAddModal && <AddDrug loggedUser={loggedUser} setLoggedUser={setLoggedUser} setShowAddModal={c.actions.setShowAddModal} getUser={getUser} drugList={c.drugList} />}
           {
-            (loggedUser?.medicines?.length > 0) && <Link to="/reminders">לניהול התזכורות</Link>
+            (loggedUser.medicines?.length > 0) && <Link to="/reminders">לניהול התזכורות</Link>
+          }
+          {
+            (loggedUser.medicines?.length > 1) && <Button content="בדוק התנגשויות בין תרופות" oncClickFunc={() => setShowInteractionsModal(true)} />
+          }
+          {
+            showInteractionsModal && <InteractionCheck setShowInteractionsModal={setShowInteractionsModal} medicines={loggedUser.medicines} />
           }
 
          {isLoading && <Spinner />} 

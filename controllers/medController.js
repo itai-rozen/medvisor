@@ -2,12 +2,10 @@
 const fs = require('fs')
 const israMeds = fs.readFileSync('./src/israMeds.json')
 const jwt = require('jsonwebtoken')
-const {signIn, signUp} = require('./../utils/auth')
+const { signIn, signUp } = require('./../utils/auth')
 const Patient = require('./../model/medUser')
 require('dotenv').config({path: './../.env'})
 const medController = {}
-
-
 
 medController.getMeds = (req, res) => {
   res.send(israMeds)

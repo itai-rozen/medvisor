@@ -63,7 +63,7 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
   const addDrug = async e => {
     e.preventDefault()
     setIsLoading(true)
-    if (loggedUser.medicines.find(med => med.drugName === drugName)) {
+    if (loggedUser.medicines?.find(med => med.drugName === drugName)) {
       setError('לא ניתן לבחור את אותה התרופה פעמיים')
       setIsLoading(false)
       return
