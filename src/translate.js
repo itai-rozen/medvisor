@@ -1,10 +1,10 @@
-app.post('/api/songs/translate', (req, res) => {
-  const { text,lang } = req.body
+drugRouter.post('/translate', (req, res) => {
+  const { text } = req.body
   const options = {
       method: "POST",
       url: "https://microsoft-translator-text.p.rapidapi.com/translate",
       params: {
-          to: `${lang}`,
+          to: `he`,
           "api-version": "3.0",
           profanityAction: "NoAction",
           textType: "plain",

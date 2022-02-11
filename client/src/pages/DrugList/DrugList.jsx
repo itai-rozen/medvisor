@@ -48,7 +48,7 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
               <li className='header-item item times'>פעמים</li>
               <li className='header-item item time-unit'>תדירות</li>
               <li className='header-item item notes'>הערות לנטילה</li>
-              <li className='header-item item description'>תיאור</li>
+              <li className='header-item item description'>לטיפול ב...</li>
               <li className='header-item item delete'></li>
             </ul>
             {loggedUser.medicines && loggedUser.medicines.map(medicine => {

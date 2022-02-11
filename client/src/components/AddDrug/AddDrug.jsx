@@ -46,7 +46,9 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
         const descriptionRes = await axios.get(`https://rxnav.nlm.nih.gov/REST/rxclass/class/byDrugName.json?drugName=${ingredientForApiFetching}&relaSource=MEDRT&relas=may_treat`)
         const descriptionArr = descriptionRes.data?.rxclassDrugInfoList?.rxclassDrugInfo || []
         const nonUniqueDescription = (descriptionArr).map(desc => desc.rxclassMinConceptItem?.className)
-        const description = [...new Set(nonUniqueDescription)].join(', ')
+        const descriptionEng = [...new Set(nonUniqueDescription)].join(', ')
+        const { data } = await axios.post('/api/drug/translate', { text: descriptionEng })
+        const description = data
         return { description, rxId }
       } catch (err) {
         setError(err.message)

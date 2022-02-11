@@ -15,7 +15,7 @@ const scrape = async () => {
     await page.type(searchInputSelector, 'a')
     const searchButtonSelector = '#homeCtrl > div.display-wrapper > ui-view > div > div > div.search-textbox-container > idr-search-textbox > div:nth-child(1) > div > div'
     await page.click(searchButtonSelector)
-    fs.writeFileSync('./src/israMeds_tmp.json', '[')
+    fs.writeFileSync('./src/israMeds.json', '[')
     const pagesSelector = '#homeCtrl > div.display-wrapper > ui-view > div > search-list > div > div > div.compareAndSortBarWrap > div > div.checkbox.selectAll > span'
     await page.waitForSelector(pagesSelector)
     const pagesNum = await page.evaluate(() => {
@@ -24,7 +24,7 @@ const scrape = async () => {
     })
     const roundPages = Math.floor(pagesNum)
     for (let i = 0; i < roundPages; i++){
-    if (i !== 0 ) fs.appendFileSync('./src/israMeds_tmp.json',',')
+    if (i !== 0 ) fs.appendFileSync('./src/israMeds.json',',')
     await page.waitForNetworkIdle(page,500,0)
     const elements = await page.evaluate(() => {
         const resultSelector = '#homeCtrl > div.display-wrapper > ui-view > div > search-list > div > div > div.search_wrap.ng-scope > div'
@@ -43,12 +43,12 @@ const scrape = async () => {
            
        })
     })
-    fs.appendFileSync('./src/israMeds_tmp.json',elements.toString())
+    fs.appendFileSync('./src/israMeds.json',elements.toString())
     const nextPageSelector = '#homeCtrl > div.display-wrapper > ui-view > div > search-list > div > div > div.text-center > ul > li:nth-child(8) > a'
     await page.click(nextPageSelector)
 }
     await browser.close();
-    fs.appendFileSync('./src/israMeds_tmp.json', ']')
+    fs.appendFileSync('./src/israMeds.json', ']')
 };
 
 module.exports = scrape;
