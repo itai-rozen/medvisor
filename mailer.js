@@ -17,12 +17,13 @@ const sendEmail = (email, text, schedule) => {
       pass: process.env.MEDVISOR_GMAIL_PASS
     }
   })
-  cron.schedule(schedule, () => {
+  const task = cron.schedule(schedule, () => {
     account.sendMail(mailOptions,(err, info) => {
       if (err) console.log(err)
       else console.log('email sent')
     })
   }, { timezone:"Asia/Jerusalem"})
+  task.start()
 }
 
 
