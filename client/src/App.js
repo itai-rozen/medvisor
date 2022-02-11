@@ -8,6 +8,7 @@ import Auth from './pages/Auth/Auth';
 import DrugList from './pages/DrugList/DrugList';
 import ReminderList from './pages/ReminderList/ReminderList';
 import './App.css';
+import Footer from './components/Footer/Footer';
 
 
 
@@ -22,7 +23,6 @@ function App() {
 
   const getReminders = async () => {
     const { data } = await axios.get('/api/reminder')
-    console.log('reminders: ', data)
     setReminders(data)
   }
 
@@ -92,6 +92,7 @@ function App() {
         <Route path="/drugs" element={<DrugList getUser={getUser} setLoggedUser={setLoggedUser} loggedUser={loggedUser} />} />
         <Route path="/reminders" element={<ReminderList getReminders={getReminders} reminders={reminders} loggedUser={loggedUser} />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   </Provider>
 }

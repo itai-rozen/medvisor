@@ -12,7 +12,7 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
   const [isWhenNeeded, setIsWhenNeeded] = useState(false)
   const [unitAmount, setUnitAmount] = useState(0)
   const [times, setTimes] = useState(0)
-  const [timeUnit, setTimeUnit] = useState('day')
+  const [timeUnit, setTimeUnit] = useState('ביום')
   const [notes, setNotes] = useState('')
   const [error, setError] = useState('')
 
@@ -43,15 +43,10 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
       try {
         const rxIdRes = await axios.get(`https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${ingredientForApiFetching}&search=2`)
         const rxId = rxIdRes.data?.idGroup?.rxnormId[0]
-        console.log('drug rxid @getDrugDescription @addDrug: ', rxId)
         const descriptionRes = await axios.get(`https://rxnav.nlm.nih.gov/REST/rxclass/class/byDrugName.json?drugName=${ingredientForApiFetching}&relaSource=MEDRT&relas=may_treat`)
-        console.log('description res: ', descriptionRes)
-        // TODO keep only unique values with set
         const descriptionArr = descriptionRes.data?.rxclassDrugInfoList?.rxclassDrugInfo || []
-        console.log('description arrat: ', descriptionArr)
-        const description = descriptionArr.map(desc => desc.rxclassMinConceptItem?.className).join(',')
-        console.log('drug description @getDrugDescription @addDrug: ', description)
-
+        const nonUniqueDescription = (descriptionArr).map(desc => desc.rxclassMinConceptItem?.className)
+        const description = [...new Set(nonUniqueDescription)].join(', ')
         return { description, rxId }
       } catch (err) {
         setError(err.message)
@@ -133,7 +128,6 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
 
             <Autocomplete
               disablePortal
-              required
               id="combo-box-demo"
               options={c.drugStrs}
               sx={{ width: 300 }}
@@ -146,24 +140,20 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
                   </li>
                 )
               }}
-              renderInput={(params, index) => <TextField key={params.label + index} {...params} label="הקלד שם תרופה או חומר פעיל" />}
+              renderInput={(params, index) => <TextField key={params.label + index} {...params} label="שם תרופה או חומר פעיל" />}
             />
             <FormControlLabel control={<Checkbox onChange={() => setIsWhenNeeded(!isWhenNeeded)} size="medium" />} label="לפי הצורך" />
             <div className="form-choices-container">
               {
                 !isWhenNeeded && <div className="form-choices">
                   <TextField
-                    inputProps={{ min: 0, style: { textAlign: 'center', direction: 'rtl' } }}
+                    inputProps={{ min: 0, style: { textAlign: 'center' } }}
                     variant="standard"
                     onChange={e => setUnitAmount(e.target.value)}
                     name="unitAmount"
                     label="כמות יחידות"
                     type="number"
-                    required
-                    sx={{
-                      direction: 'rtl',
-                      textAlign: 'right'
-                    }} />
+                    required />
 
                   <TextField
                     inputProps={{ min: 0, style: { textAlign: 'center' } }}
@@ -177,7 +167,7 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
                   <FormControl >
                     <InputLabel id="demo-simple-select-label">תדירות</InputLabel>
                     <Select
-
+                      
                       variant='standard'
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"

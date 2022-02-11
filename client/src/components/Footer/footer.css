@@ -1,0 +1,26 @@
+.footer {
+  height: 5vh;
+  background-color: var(--primary-color);
+  width: 100%;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.footer a {
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.footer a:hover {
+  text-shadow: 0 0 5px #FFF,
+ 0 0 10px #FFF, 
+ 0 0 15px #FFF, 
+ 0 0 10px var(--primary-color), 
+ 0 0 20px var(--primary-color), 
+ 0 0 20px var(--primary-color), 
+ 0 0 25px var(--primary-color), 
+ 0 0 25px var(--primary-color);
+}

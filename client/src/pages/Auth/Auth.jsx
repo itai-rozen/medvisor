@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './auth.css'
-import { GoogleLogin } from 'react-google-login'
 import axios from 'axios'
-import GoogleIcon from '@mui/icons-material/Google';
 import { TextField, Input, FormControl, InputLabel, InputAdornment, IconButton } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Spinner from './../../components/Spinner/Spinner'
+import BackgroundImage from '../../components/BackgroundImage/BackgroundImage'
 
-const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
+const Auth = ({ isSignup, setLoggedUser }) => {
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const [name, setName] = useState('')
@@ -27,14 +26,16 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
   const signUser = async e => {
     setIsLoading(true)
     e.preventDefault()
-    // TODO add password validation
     const isValidPassword = checkValidPassword()
-    console.log(name, password, rePassword, email)
+    if (isSignup && !isValidPassword){
+      setError('יש להכניס סיסמה שעונה על תנאי האבטחה')
+      setIsLoading(false)
+      return
+    }
     try {
       const { data } = await axios.post('/api/auth', {
         name, password, rePassword, email, isSignup
       })
-      console.log('current user: ', data)
       if (data.error) throw data.error
       if (data.result.email) {
         setIsLoading(false)
@@ -129,6 +130,7 @@ const Auth = ({ isSignup, setIsSignUp, setLoggedUser }) => {
       <input type="submit" value={isSignup ? 'הירשם' : 'התחבר'} />
 
     </form>
+    <BackgroundImage />
     <div className="message">{error}</div>
     {isLoading && <Spinner />}
   </div>

@@ -1,0 +1,19 @@
+.img-container {
+  direction: ltr;
+  position: relative;
+  width: 100%;
+  animation: fade 5s;
+  overflow: hidden;
+}
+
+
+.block {
+	width: 120vw;
+  margin: 0 auto;  
+	position: absolute;
+  background-color: var(--text-color);
+	top: 20px;
+  height: 100px;
+  transform: rotate(5deg);
+	box-shadow: inset 0px 0px 25px 5px var(--text-color);
+}

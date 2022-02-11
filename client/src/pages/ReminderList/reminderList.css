@@ -1,0 +1,70 @@
+.reminders-container {
+  height: 85vh;
+  direction: rtl;
+  text-align: right;
+}
+.reminders-wrapper {
+  height: 70vh;
+  text-align: right;
+  overflow-y: auto;
+  background-color: var(--text-color);
+}
+
+.reminders-container h2 {
+  background: linear-gradient(to bottom, var(--secondary-color), var(--primary-color));
+  color: var(--text-color);
+  letter-spacing: 1.5px;
+}
+.reminder-header-list {
+  border-bottom: 3px solid var(--secondary-color);;
+  background-color: var(--button-color);
+  display: flex;
+  justify-content: space-around;
+  font-size: 2rem;
+  padding: 5px 0;
+}
+
+.reminder-header-list li {
+  padding: 0 15px;
+}
+
+.reminders-list.list {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+}
+
+.reminder-item-list {
+  display: grid;
+  grid-template-columns: 3fr 2fr 1fr;
+  grid-gap: 10px;
+  align-items: center;
+  
+}
+ul.reminder-item-list {
+  border-bottom: 2px solid transparent;
+}
+ul.reminder-item-list:hover {
+ border-bottom-color:var(--secondary-color);
+}
+
+.reminder-medicine-item, .reminder-item-list li {
+  margin: 5px 15px;
+  text-align: right;
+
+}
+
+
+
+.reminders-container li button {
+  border: none;
+  background-color: var(--text-color);
+  color: red;
+  opacity: 0;
+}
+
+ul.reminder-item-list:hover button{
+  opacity: 1;
+ }

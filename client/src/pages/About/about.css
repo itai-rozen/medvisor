@@ -2,7 +2,7 @@
 .about-container {
   
   background-color: var(--text-color);
-  height: 90vh;
+  height: 85vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -14,45 +14,18 @@
   font-size: 3.5rem;
   letter-spacing: 2px;
 }
-.about-container h2 {
+ h2 {
   font-size: 2rem;
+  padding: 10px 20px;
+  /* text-align: center; */
 }
 .about-container h3 {
   font-size: 1.5rem;
 }
 
-.img-container {
-  direction: ltr;
-  position: relative;
-  width: 100%;
-  animation: fade 5s;
-  overflow: hidden;
-}
-.img-container img {
-}
 
-.block {
-	width: 120vw;
-  margin: 0 auto;
-  
-	position: absolute;
-  background-color: var(--text-color);
-	top: 20px;
-  height: 100px;
-  transform: rotate(5deg);
-	box-shadow: inset 0px 0px 25px 5px var(--text-color);
-}
 
-.footer {
-  height: 5vh;
-  background-color: var(--primary-color);
-  width: 100%;
-  color: var(--text-color);
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  padding: 0 10px;
-}
+
 
 @keyframes fade {
   from {opacity: 0.2;}

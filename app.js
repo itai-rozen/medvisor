@@ -3,7 +3,7 @@ const cors = require('cors')
 const path = require('path')
 const scrape = require('./src/scraper')
 require('dotenv').config()
-const fs = require('fs')
+const cron = require('node-cron')
 const app = express()
 const medRoutes = require('./routes/medRoutes')
 const drugRoutes = require('./routes/drugRoutes')
@@ -18,7 +18,9 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 const currMonth = new Date().getMonth()
 const currHour = new Date().getHours()
 
-if (currMonth % 6 === 0 && currHour === 4) scrape()
+cron.schedule('0 3 1 3,9 *', () => {
+   scrape()
+})
 
 app.use('/api', medRoutes)
 app.use('/api/drug', drugRoutes)

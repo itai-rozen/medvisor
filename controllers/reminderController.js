@@ -6,9 +6,7 @@ const reminderController = {}
 
 reminderController.getReminders = async (req, res) => {
   try {
-    const { email } = await req.body
     const reminders = await Reminder.find()
-    console.log('reminders @getReminders @reminderController: ',reminders)
     res.send(reminders)
   }catch(err){
     console.log(err)
@@ -20,7 +18,6 @@ reminderController.addReminder = async (req,res) => {
     const { email, medicines, schedule } = await req.body
     const cronFunction = sendEmail(email,medicines.join('\n'),schedule)
     const reminder = new Reminder({email,medicines,schedule,cronFunction})
-    console.log('new reminder: ',reminder)
     await reminder.save()
     res.send({success: 'ok'})
   } catch(err){

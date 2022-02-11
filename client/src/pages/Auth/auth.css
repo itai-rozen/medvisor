@@ -1,4 +1,6 @@
 .auth-form-container {
+    position: relative;
+    background-color: var(--text-color);
     width: 100vw;
     height: 90vh;
     display: flex;
@@ -8,13 +10,19 @@
   }
   
   .auth-form {
+    position: absolute;
+    background-color: #fff;
     direction: ltr;
-    width: 50%;
-    height: 50%;
+    width: 30%;
+    height: 70%;
     display: flex;
+    padding: 10px 0;
+    z-index: 1;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+    border: 3px solid var(--primary-color);
+    border-radius: var(--border-radius);
 }
 
 .passwords-container {
@@ -28,7 +36,9 @@
   position: absolute;
   width: 250px;
   left: 230px;
-  top: 15%;
+  background-color: #fefefe;
+  z-index: 2;
+  top: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -58,7 +68,20 @@
   color: green;
 }
 
-.validation.valid .validation::before  {
+.validation.valid::before  {
   content: '✓';
   color: green;
+}
+
+.message {
+  height: 20px;
+}
+
+input[type="submit"]:focus {
+background-color: var(--text-color);
+}
+
+.auth-form-container .img-container {
+  position: absolute;
+  bottom: 0;
 }

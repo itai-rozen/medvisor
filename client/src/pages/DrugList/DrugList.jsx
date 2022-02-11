@@ -10,7 +10,7 @@ import { Consumer } from '../../components/Context'
 import Spinner from '../../components/Spinner/Spinner'
 
 const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
-
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [showInteractionsModal, setShowInteractionsModal] = useState(false)
@@ -42,33 +42,33 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
           <div className="druglist-wrapper">
 
             <ul className="medicine-headers list">
-              <li className='header-item'>שם התרופה</li>
-              <li className='header-item'>משטר נטילה</li>
-              <li className='header-item'>יחידות בכל נטילה</li>
-              <li className='header-item'>פעמים</li>
-              <li className='header-item'>תדירות</li>
-              <li className='header-item'>הערות לנטילה</li>
-              <li className='header-item'>תיאור</li>
-              <li className='header-item'></li>
+              <li className='header-item item name'>שם התרופה</li>
+              <li className='header-item item when-needed'>משטר נטילה</li>
+              <li className='header-item item amount'>יחידות בכל נטילה</li>
+              <li className='header-item item times'>פעמים</li>
+              <li className='header-item item time-unit'>תדירות</li>
+              <li className='header-item item notes'>הערות לנטילה</li>
+              <li className='header-item item description'>תיאור</li>
+              <li className='header-item item delete'></li>
             </ul>
             {loggedUser.medicines && loggedUser.medicines.map(medicine => {
               const { drugName, isWhenNeeded, unitAmount, times, timeUnit, notes, description } = medicine
               return <ul className="medicine-details-list list" key={drugName}>
-                <li className="medicine-details-item">{drugName}</li>
-                <li className="medicine-details-item">{isWhenNeeded ? 'לפי הצורך':'באופן קבוע'}</li>
-                <li className="medicine-details-item">{unitAmount}</li>
-                <li className="medicine-details-item">{times}</li>
-                <li className="medicine-details-item">{timeUnit}</li>
-                <li className="medicine-details-item">{notes}</li>
-                <li className="medicine-details-item">{description}</li>
-                <li className="medicine-details-item"><Button content={<RemoveCircleTwoToneIcon />} oncClickFunc={() => deleteDrug(drugName)} /></li>
+                <li className="medicine-details-item item name">{drugName}</li>
+                <li className="medicine-details-item item when-needed">{isWhenNeeded ? 'לפי הצורך':'באופן קבוע'}</li>
+                <li className="medicine-details-item item amount">{unitAmount}</li>
+                <li className="medicine-details-item item times">{times}</li>
+                <li className="medicine-details-item item time-unit">{timeUnit}</li>
+                <li className="medicine-details-item item notes">{notes}</li>
+                <li className="medicine-details-item item description">{description}</li>
+                <li className="medicine-details-item item delete"><Button content={<RemoveCircleTwoToneIcon />} oncClickFunc={() => deleteDrug(drugName)} /></li>
               </ul>
             })}
           </div>
           <Button content="הוסף תרופה" oncClickFunc={() => c.actions.setShowAddModal(true)} />
           {c.showAddModal && <AddDrug loggedUser={loggedUser} setLoggedUser={setLoggedUser} setShowAddModal={c.actions.setShowAddModal} getUser={getUser} drugList={c.drugList} />}
           {
-            (loggedUser.medicines?.length > 0) && <Link to="/reminders">לניהול התזכורות</Link>
+            (loggedUser.email && loggedUser.medicines?.length > 0) && <Button content="לניהול התזכורות" oncClickFunc={() => navigate("/reminders")} />
           }
           {
             (loggedUser.medicines?.length > 1) && <Button content="בדוק התנגשויות בין תרופות" oncClickFunc={() => setShowInteractionsModal(true)} />
