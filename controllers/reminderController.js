@@ -18,10 +18,10 @@ reminderController.addReminder = async (req,res) => {
     const { email, medicines, schedule } = await req.body
     const cronFunction = sendEmail(email,medicines.join('\n'),schedule)
     const reminder = new Reminder({email,medicines,schedule})
-    reminder.method('sendEmail', () => {
-      sendEmail(email,medicines.join('\n'),schedule)
-    })
-    reminder.sendEmail()
+    // reminder.method('sendEmail', () => {
+    //   sendEmail(email,medicines.join('\n'),schedule)
+    // })
+    // reminder.sendEmail()
     await reminder.save()
     res.send({success: 'ok'})
   } catch(err){
