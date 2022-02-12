@@ -4,7 +4,7 @@ const reminderRouter = express.Router()
 
 reminderRouter.get('/', getReminders)
 reminderRouter.post('/', addReminder)
-reminderRouter.delete('/', deleteReminder)
+reminderRouter.delete('/:_id', deleteReminder)
 
 
 module.exports = reminderRouter

@@ -29,7 +29,6 @@ const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
   const resetError = () => setError('')
 
   const updateScheduleArrLengthByTimes = num => {
-    console.log('num : ', num)
     setTimes(+num)
     const newArr = Array(+num).fill(null)
     setScheduleNumbers(newArr)

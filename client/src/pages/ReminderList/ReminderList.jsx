@@ -34,9 +34,12 @@ const ReminderList = ({loggedUser,reminders,getReminders}) => {
   const deleteReminder = async _id => {
     try {
       setIsLoading(true)
-      await axios.delete('/api/reminder', {_id})
+      const res = await axios.delete(`/api/reminder/${_id}`)
+      setIsLoading(false)      
+      getReminders()
     }catch(err){
       console.log(err)
+      setIsLoading(false)      
     }
   }
 
@@ -63,7 +66,7 @@ const ReminderList = ({loggedUser,reminders,getReminders}) => {
             </ul>
         </li>
         <li className='reminder-item-list'>{getTimeUnitStr(reminder.schedule)}</li>
-        <li className='reminder-item-list'><Button content={<RemoveCircleTwoToneIcon />} oncClickFunc={() => {  }} /></li>
+        <li className='reminder-item-list'><Button content={<RemoveCircleTwoToneIcon />} oncClickFunc={() => { deleteReminder(reminder._id) }} /></li>
         </ul>
       })}
     </ul>

@@ -26,15 +26,18 @@ reminderController.addReminder = async (req,res) => {
 }
 
 reminderController.deleteReminder = async (req,res) => {
-  try {
-    const { _id } = req.body
-    const reminder = Reminder.findById(_id)
-    reminder.cronFunction.destroy()
-    await Reminder.findByIdAndDelete(_id)
-    res.send({success: 'ok'})
-  }catch(err){
-    res.send({error: err})
-  }
+    console.log('entered delete reminder funx')
+    const { _id } = req.params
+    console.log('od: ', _id)
+    const reminder = await Reminder.findById(_id)
+    console.log('reminder: ',reminder)
+    Reminder.deleteOne({_id: _id})
+    .then(resp => {
+      res.end()
+
+    }).catch(err => {
+      res.send(err)
+    })
 }
 
 module.exports = reminderController
