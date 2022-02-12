@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './auth.css'
 import axios from 'axios'
@@ -24,9 +24,10 @@ const Auth = ({ isSignup, setLoggedUser }) => {
   const navigate = useNavigate()
 
   const signUser = async e => {
-    setIsLoading(true)
     e.preventDefault()
-    const isValidPassword = checkValidPassword()
+    setIsLoading(true)
+    console.log('yo')
+    const isValidPassword = is8Chars && is1Letter
     if (isSignup && !isValidPassword){
       setError('יש להכניס סיסמה שעונה על תנאי האבטחה')
       setIsLoading(false)
@@ -55,10 +56,10 @@ const Auth = ({ isSignup, setLoggedUser }) => {
     setIs8Chars((value.length > 7))
     setIs1Letter(/[a-z]/i.test(value))
   }
-  const checkValidPassword = () => {
 
-  }
-
+  useEffect(() => {
+    console.log('error:' ,error)
+  },[error])
   return <div className="auth-form-container">
     <form className='auth-form' onChange={() => setError('')} onSubmit={signUser} >
       {
