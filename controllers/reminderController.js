@@ -17,7 +17,11 @@ reminderController.addReminder = async (req,res) => {
   try{
     const { email, medicines, schedule } = await req.body
     const cronFunction = sendEmail(email,medicines.join('\n'),schedule)
-    const reminder = new Reminder({email,medicines,schedule,cronFunction})
+    const reminder = new Reminder({email,medicines,schedule})
+    reminder.method('sendEmail', () => {
+      sendEmail(email,medicines.join('\n'),schedule)
+    })
+    reminder.sendEmail()
     await reminder.save()
     res.send({success: 'ok'})
   } catch(err){
@@ -26,11 +30,8 @@ reminderController.addReminder = async (req,res) => {
 }
 
 reminderController.deleteReminder = async (req,res) => {
-    console.log('entered delete reminder funx')
     const { _id } = req.params
-    console.log('od: ', _id)
     const reminder = await Reminder.findById(_id)
-    console.log('reminder: ',reminder)
     Reminder.deleteOne({_id: _id})
     .then(resp => {
       res.end()
