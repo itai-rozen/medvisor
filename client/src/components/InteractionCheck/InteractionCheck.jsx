@@ -10,6 +10,7 @@ const InteractionCheck = ({ medicines, setShowInteractionsModal }) => {
   const [showDisclaimer, setShowDisclaimer] = useState(true)
   const [rxString, setRxString] = useState('')
   const [drugInteractions, setDrugInteractions] = useState([])
+  const [error, setError] = useState('')
 
   const getDrugNameByRxId = rxId => {
     const medicineObj =  medicines.find(med => med.rxId === rxId)
@@ -27,10 +28,8 @@ const InteractionCheck = ({ medicines, setShowInteractionsModal }) => {
     try {
       setIsLoading(true)
       const { data } = await axios.get(`https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=${rxString}&sources=ONCHigh `)
-      console.log('interactions: ',data)
       const interactionPairArr = data?.fullInteractionTypeGroup[0].fullInteractionType
-      console.log('interaction pair array: ', interactionPairArr)
-      const minConcepts = interactionPairArr.map(int => int.minConcept)
+      const minConcepts = interactionPairArr?.map(int => int.minConcept)
       const interactionPairs = interactionPairArr?.map(int => int.interactionPair)
       const rxPairs = minConcepts?.map(drug => drug?.map(dr => dr.rxcui))
       const interactionArrPairs = interactionPairs.map(int => int.map(i => {
@@ -39,11 +38,10 @@ const InteractionCheck = ({ medicines, setShowInteractionsModal }) => {
         }
       }))
       console.log('min concepts: ',rxPairs) 
-      console.log('interaction pairs: ',interactionArrPairs)
       extractInteractionArr(rxPairs, interactionArrPairs)
       setIsLoading(false)
     } catch(err){
-      console.log(err)
+      setError('לא נמצאו אינטרקציות')
       setIsLoading(false)
     }
   }
@@ -64,7 +62,6 @@ const InteractionCheck = ({ medicines, setShowInteractionsModal }) => {
   }
 
   useEffect(() => {
-    console.log('set interaction show: ',setShowInteractionsModal)
     generateRxString()
     if (rxString)   fetchInteractions()
   }, [rxString])
@@ -72,7 +69,7 @@ const InteractionCheck = ({ medicines, setShowInteractionsModal }) => {
 return <div className="interactions-container">
 
 <div className="interactions-modal modal">
-  <ul className="interaction-header">
+  <ul className="interaction-headers">
     <li className="interaction-item">התרופות</li>
     <li className="interaction-item">אינטרקציה</li>
     <li className="interaction-item">חומרה</li>
@@ -89,6 +86,7 @@ return <div className="interactions-container">
 
   {showDisclaimer && <div className="disclaimer-container">  <Disclaimer setShowDisclaimer={setShowDisclaimer} /></div>}
   <button onClick={() => setShowInteractionsModal(false)} >X</button>
+  <div className="message">{error}</div>
 
 </div>
   {isLoading && <Spinner />}

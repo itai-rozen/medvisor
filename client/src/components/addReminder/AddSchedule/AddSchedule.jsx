@@ -13,21 +13,19 @@ const AddSchedule = ({ index,timeUnit, setScheduleNumbers, scheduleNumbers }) =>
 
   const renderInputsObject = () => {
     if (timeUnit === 'day') {
-      return    <> <FormControl >
+      return    <div className="schedule-input"> <FormControl >
         <InputLabel id="demo-simple-select-label">תדירות</InputLabel>
       <Select
         variant='standard'
-        // labelId="demo-simple-select-label"
-        // id="demo-simple-select"
         value={timeUnit}
         label="שעה"
         onChange={e => updateSchedule(e.target.value)}
       >
         {[...Array(24)].map((_, i) => <MenuItem key={i} value={i}>{i}:00</MenuItem>)}
       </Select>
-    </FormControl></>
+    </FormControl></div>
     } else if (timeUnit === 'week') {
-      return <> <FormControl >
+      return <div className="schedule-input"> <FormControl >
         <InputLabel id="demo-simple-select-label">תדירות</InputLabel>
         <Select
           variant='standard'
@@ -40,18 +38,18 @@ const AddSchedule = ({ index,timeUnit, setScheduleNumbers, scheduleNumbers }) =>
           {weekDays.map((day, i) => <MenuItem key={day} value={i}>{day}</MenuItem>)}
         </Select>
       </FormControl>
-          </>
+          </div>
     } else if (timeUnit === 'month') {
-      return <>
+      return <div className="schedule-input">
       <input type="date" onChange={e => updateSchedule(e.target.value)} />
-      </> 
+      </div> 
     } else return
   }
 
 
-  return <>
+  return <div className="schedule-inputs-container">
     {renderInputsObject()}
-  </>
+  </div>
 
 }
 

@@ -25,3 +25,44 @@
   align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
 }
+
+.interaction-headers {
+  border-bottom: 3px solid var(--secondary-color);;
+  background-color: var(--button-color);
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  font-size: 2rem;
+  padding: 5px 0;
+}
+
+.interaction-headers li {
+  padding: 0 15px;
+}
+
+
+.interaction-detail-list  {
+  text-align: right;
+  align-items: stretch;
+  display: grid;
+  grid-template-columns: 2fr 3fr 1fr;
+  grid-gap: 10px;
+
+}
+
+.interaction-list {
+  
+}
+ul.reminder-item-list {
+  border-bottom: 2px solid transparent;
+}
+ul.reminder-item-list:hover {
+ border-bottom-color:var(--secondary-color);
+}
+
+.interaction-detail-item {
+  margin: 5px 15px;
+  text-align: right;
+  font-size: 1.5rem;
+
+}

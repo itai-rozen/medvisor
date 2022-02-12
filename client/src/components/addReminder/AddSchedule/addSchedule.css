@@ -1,0 +1,7 @@
+.schedule-inputs-container > * > * {
+  width: 50%;
+}
+
+.schedule-input {
+  margin: 5px 0;
+}

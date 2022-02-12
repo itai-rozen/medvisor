@@ -4,6 +4,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/lab'
 import { InputLabel, MenuItem, Select, TextField, FormControl } from '@mui/material/';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import { Consumer } from './../Context'
 import AddSchedule from './AddSchedule/AddSchedule';
 import Spinner from './../../components/Spinner/Spinner'
@@ -69,6 +70,7 @@ const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
   
     try {
       setIsLoading(true)
+      console.log('medicines: ', medicines)
       const res = await axios.post('/api/reminder', { email,medicines,schedule:str })
       setIsLoading(false)
       getReminders()
@@ -94,16 +96,17 @@ const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
             <Button content="X" oncClickFunc={() => setShowReminderModal(false)} />
             <h3>הוסף תרופות מהרשימה לתזכורת</h3>
             <div className="medication-choices-container">
-              <div className="patient-mesications">
-                <ul className="med-list">
+              <div className="patient-medications list-container">
+                <h4><LocalHospitalIcon /></h4>
+                <ul className="med-list reminder-list">
                   {c.loggedUser.medicines.map(med => {
                     return <li className='med-item' key={med.drugName} onClick={() => addMedToReminderList(med.times,med.drugName,med.unitAmount)}>{med.times} x {med.drugName} x {med.unitAmount}</li>
                   })}
                 </ul>
               </div>
-              <div className="reminder-medications">
+              <div className="reminder-medications list-container">
                 <h4><AccessAlarmIcon /></h4>
-                <ul className="reminder-medication-list med-list">
+                <ul className="reminder-medication-list reminder-list">
                   {medicines.map(medicine => {
                     return <li className="med-item" key={medicine} onClick={() => removeMedFromList(medicine)}>{medicine}</li>
                   })}
@@ -151,9 +154,12 @@ const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
               {
                 timeUnit !== 'day' && (times > 0) && timeUnit && <input type="time" onChange={e => setScheduleTime(e.target.value)} id="" />
               }
-              <h5>התזכורות יישלחו למייל איתו נרשמת.</h5>
+              <h3>התזכורות יישלחו למייל איתו נרשמת.</h3>
             </div>
-            <div className="add-reminder" onClick={() => addReminder()} >הוסף תזכורת</div>
+            {/* className="add-reminder"  */}
+            <div id="add-reminder-btn">
+            <Button content="הוסף תזכורת" onClickFunc={() => addReminder()} />
+            </div>
             <div className="error-message">{error}</div>
           </div>
           {isLoading && <Spinner />}
