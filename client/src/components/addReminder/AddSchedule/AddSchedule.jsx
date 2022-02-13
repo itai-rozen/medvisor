@@ -4,9 +4,11 @@ import './addSchedule.css'
 
 const AddSchedule = ({ index,timeUnit, setScheduleNumbers, scheduleNumbers }) => {
   const weekDays = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']
-  
-  const updateSchedule = num => {
+  const [hour, setHour] = useState(9)
+
+  const updateSchedule = (num, isHour = false) => {
       const shceduleCopy = [...scheduleNumbers]
+      isHour && setHour(num)
       shceduleCopy[index] = num
       setScheduleNumbers(shceduleCopy)
   }
@@ -17,9 +19,9 @@ const AddSchedule = ({ index,timeUnit, setScheduleNumbers, scheduleNumbers }) =>
         <InputLabel id="demo-simple-select-label">תדירות</InputLabel>
       <Select
         variant='standard'
-        value={timeUnit}
+        value={hour}
         label="שעה"
-        onChange={e => updateSchedule(e.target.value)}
+        onChange={e => updateSchedule(e.target.value,true)}
       >
         {[...Array(24)].map((_, i) => <MenuItem key={i} value={i}>{i}:00</MenuItem>)}
       </Select>
@@ -41,7 +43,8 @@ const AddSchedule = ({ index,timeUnit, setScheduleNumbers, scheduleNumbers }) =>
           </div>
     } else if (timeUnit === 'month') {
       return <div className="schedule-input">
-      <input type="date" onChange={e => updateSchedule(e.target.value)} />
+        <label htmlFor="date">יום בחודש</label>
+      <input type="number" min="1" max="31" id="date" onChange={e => updateSchedule(e.target.value)} />
       </div> 
     } else return
   }
