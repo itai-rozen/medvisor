@@ -26,7 +26,6 @@ const Auth = ({ isSignup, setLoggedUser }) => {
   const signUser = async e => {
     e.preventDefault()
     setIsLoading(true)
-    console.log('yo')
     const isValidPassword = is8Chars && is1Letter
     if (isSignup && !isValidPassword){
       setError('יש להכניס סיסמה שעונה על תנאי האבטחה')
@@ -58,7 +57,6 @@ const Auth = ({ isSignup, setLoggedUser }) => {
   }
 
   useEffect(() => {
-    console.log('error:' ,error)
   },[error])
   return <div className="auth-form-container">
     <form className='auth-form' onChange={() => setError('')} onSubmit={signUser} >

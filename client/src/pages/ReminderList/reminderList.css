@@ -68,3 +68,12 @@ ul.reminder-item-list:hover {
 ul.reminder-item-list:hover button{
   opacity: 1;
  }
+
+ @media (max-width:600px){
+  .reminders-container li button {
+    opacity: 1;
+  }
+  .reminder-btn-container > button {
+    font-size: 1rem;
+  }
+ }

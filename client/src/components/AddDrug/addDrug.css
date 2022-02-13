@@ -19,6 +19,10 @@
   justify-content: center;
 }
 
+.autocomplete {
+  width: 300px;
+}
+
 .form-choices-container {
   height: 60%;
 }
@@ -51,4 +55,15 @@ input[type="number"]{
 
 .add-drug-form input[type="submit"]{
   font-size: 1.5rem;
+}
+
+@media (max-width: 660px) {
+  .add-drug-form.modal {
+    width: 80%;
+  }
+
+  .autocomplete { 
+    width: 200px;
+  }
+
 }

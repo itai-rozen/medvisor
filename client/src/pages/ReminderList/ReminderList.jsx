@@ -71,9 +71,12 @@ const ReminderList = ({loggedUser,reminders,getReminders}) => {
       })}
     </ul>
     </div>
+    <div className="reminder-btn-container">
+
     {(loggedUser.medicines?.length > 0) && <Button  content="קבע תזכורת" oncClickFunc={() => setShowReminderModal(true)} />}
     {showReminderModal && <AddReminder email={loggedUser.email} getReminders={getReminders} setShowReminderModal={setShowReminderModal} />}
     <Button content="חזרה לרשימת התרופות" oncClickFunc={() => navigate("/drugs")} />
+    </div>
     {isLoading && <Spinner />}
 
   </div>

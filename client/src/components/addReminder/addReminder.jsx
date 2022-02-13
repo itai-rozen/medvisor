@@ -49,15 +49,11 @@ const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
     const isErrors = checkErrors()
     if (isErrors) return
     const scheduleString = generateScheduleString()
-    console.log('schedule string: ', scheduleString)
     setReminder(scheduleString)
   }
 
   const generateScheduleString = () => {
     let scheduleStr = ''
-    console.log('time unit: ', timeUnit)
-    console.log('schedule numbers:', scheduleNumbers)
-    console.log('schedule times: ', scheduleTime)
     if (timeUnit === 'day') {
       scheduleStr = `0 ${scheduleNumbers.join()} * * *`
     } else if (timeUnit === 'week') {
@@ -70,7 +66,6 @@ const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
   
     try {
       setIsLoading(true)
-      console.log('medicines: ', medicines)
       const res = await axios.post('/api/reminder', { email,medicines,schedule:str })
       setIsLoading(false)
       getReminders()
@@ -156,7 +151,7 @@ const AddReminder = ({ setShowReminderModal, email, getReminders }) => {
               }
               <h3>התזכורות יישלחו למייל איתו נרשמת.</h3>
             </div>
-            {/* className="add-reminder"  */}
+    
             <div id="add-reminder-btn">
             <Button content="הוסף תזכורת" onClickFunc={() => addReminder()} />
             </div>

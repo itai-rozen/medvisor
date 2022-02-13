@@ -18,9 +18,7 @@ const InteractionCheck = ({ medicines, setShowInteractionsModal }) => {
   }
   const generateRxString = () => {
     const rxArr = medicines.map(med => med.rxId)
-    console.log('meds ex id array: ', rxArr)
     const str = rxArr.join('+')
-    console.log('string of rxcuis: ',str)
     setRxString(str)
   }
 
@@ -37,7 +35,6 @@ const InteractionCheck = ({ medicines, setShowInteractionsModal }) => {
           severity: i.severity, description: i.description 
         }
       }))
-      console.log('min concepts: ',rxPairs) 
       extractInteractionArr(rxPairs, interactionArrPairs)
       setIsLoading(false)
     } catch(err){
@@ -51,13 +48,11 @@ const InteractionCheck = ({ medicines, setShowInteractionsModal }) => {
     rxs.forEach((rx,i) => {
       const displayObj = {}  
       const drugPair = rx.map(singleRx => getDrugNameByRxId(singleRx))
-        console.log('drug names pair: ',drugPair)
       displayObj.names = drugPair.join(' + ')
       displayObj.severity = interactions[i][0].severity
       displayObj.description = interactions[i][0].description
       displayArr.push(displayObj)
     })
-    console.log('array of interactions to display: ', displayArr)
     setDrugInteractions([...new Set(displayArr)])
   }
 

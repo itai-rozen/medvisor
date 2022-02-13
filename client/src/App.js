@@ -31,7 +31,6 @@ function App() {
       const { email } = loggedUser
       try {
         const { data } = await axios.post('/api/user', { email })
-        console.log('data @getUser @App: ', data)
         setLoggedUser(data)
       } catch (err) {
         console.log(err)

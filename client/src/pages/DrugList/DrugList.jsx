@@ -65,6 +65,8 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
               </ul>
             })}
           </div>
+          <div className="buttons-container">
+
           <Button content="הוסף תרופה" oncClickFunc={() => c.actions.setShowAddModal(true)} />
           {c.showAddModal && <AddDrug loggedUser={loggedUser} setLoggedUser={setLoggedUser} setShowAddModal={c.actions.setShowAddModal} getUser={getUser} drugList={c.drugList} />}
           {
@@ -73,6 +75,7 @@ const DrugList = ({ getUser, loggedUser, setLoggedUser }) => {
           {
             (loggedUser.medicines?.length > 1) && <Button content="בדוק התנגשויות בין תרופות" oncClickFunc={() => setShowInteractionsModal(true)} />
           }
+          </div>
           {
             showInteractionsModal && <InteractionCheck setShowInteractionsModal={setShowInteractionsModal} medicines={loggedUser.medicines} />
           }

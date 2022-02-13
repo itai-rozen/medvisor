@@ -76,7 +76,6 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
 
     const { description, rxId } = await getDrugDescription()
     if (loggedUser.email) {
-      console.log('with backend')
       try {
         const res = await axios.post('/api/drug/addDrug', {
           email: loggedUser.email,
@@ -89,7 +88,6 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
           rxId,
           description
         })
-        console.log('result @addDrug @addDrug: ', res)
         getUser()
       } catch (err) {
         setError(err.messaage)
@@ -97,7 +95,6 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
       }
 
     } else {
-      console.log('local')
       const loggedUserCopy = { ...loggedUser }
       if (!loggedUserCopy.medicines) loggedUserCopy.medicines = []
       if (loggedUserCopy.medicines.find(med => med.drugName === drugName)) {
@@ -114,7 +111,6 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
         description,
         rxId
       })
-      console.log('logged user: ', loggedUserCopy)
       setLoggedUser(loggedUserCopy)
     }
     setIsLoading(false)
@@ -127,12 +123,13 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
       c =>
         <div className="form-container">
           <form className="add-drug-form modal" onSubmit={addDrug}>
+<div className="autocomplete">
 
             <Autocomplete
               disablePortal
               id="combo-box-demo"
               options={c.drugStrs}
-              sx={{ width: 300 }}
+              // sx={{ width: 300 }}
               value={drugName}
               onChange={e => setDrugName(e.target.innerText)}
               renderOption={(props, option) => {
@@ -143,7 +140,8 @@ const AddDrug = ({ loggedUser, setLoggedUser, drugList, getUser, setShowAddModal
                 )
               }}
               renderInput={(params, index) => <TextField key={params.label + index} {...params} label="שם תרופה או חומר פעיל" />}
-            />
+              />
+              </div>
             <FormControlLabel control={<Checkbox onChange={() => setIsWhenNeeded(!isWhenNeeded)} size="medium" />} label="לפי הצורך" />
             <div className="form-choices-container">
               {

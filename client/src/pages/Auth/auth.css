@@ -2,7 +2,7 @@
     position: relative;
     background-color: var(--text-color);
     width: 100vw;
-    height: 90vh;
+    height: 85vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -84,4 +84,25 @@ background-color: var(--text-color);
 .auth-form-container .img-container {
   position: absolute;
   bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .auth-form-container {
+    justify-content: start;
+  }
+  .auth-form {
+    margin-top: 5px;
+    width: 80%;
+    /* justify-self: start; */
+  }
+  .password-validations {
+    left: unset;
+    top: unset;
+    top: 160%;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .validation {
+    font-size: 0.8rem;
+  }
 }
