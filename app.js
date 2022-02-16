@@ -9,14 +9,11 @@ const medRoutes = require('./routes/medRoutes')
 const drugRoutes = require('./routes/drugRoutes')
 const reminderRoutes = require('./routes/reminderRoutes')
 const mongoose = require('mongoose')
-
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-const currMonth = new Date().getMonth()
-const currHour = new Date().getHours()
 
 cron.schedule('0 3 1 3,9 *', () => {
    scrape()

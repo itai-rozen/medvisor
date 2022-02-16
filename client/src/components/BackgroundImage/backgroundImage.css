@@ -8,12 +8,12 @@
 
 
 .block {
-	width: 120vw;
+	width: 230vw;
   margin: 0 auto;  
 	position: absolute;
   background-color: var(--text-color);
-	top: 20px;
-  height: 100px;
+	top: 0;
+  height: 200px;
   transform: rotate(5deg);
 	box-shadow: inset 0px 0px 25px 5px var(--text-color);
 }
