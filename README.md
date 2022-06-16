@@ -5,6 +5,8 @@ when you need to take them! also find out if there are any drug-drug interaction
 harm you over time (so you might ask your doctor about them and under no circumstance stop your
 treatment on your own choice).
 
+live demo: https://ir-medvisor.herokuapp.com/
+
 Api used: 
 medicine list: https://rxnav.nlm.nih.gov/REST/allstatus.json?status=Active
 drug-drug interactions: https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=207106+152923+656659
