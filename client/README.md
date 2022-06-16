@@ -10,9 +10,11 @@ medicine list: https://rxnav.nlm.nih.gov/REST/allstatus.json?status=Active
 drug-drug interactions: https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=207106+152923+656659
 
 libraries:
-Twillo - communication api
-auth0 - authenticate users
-jsonwebtoken - jwt authentication
+nodemailer - a library for sending custom emails.
+node-cron - a library for creating cron jobs (so i can send reminders based on user preferences)puppeteer - to scrape MOH drug database.
+auth0 - authenticate users.
+jsonwebtoken - jwt authentication.
+mui - UI tools for react.
 
 ### captain's log 2.2.2022
 After several tries getting israely medication database from the Ministry of health, "Clalit" health
@@ -23,12 +25,12 @@ names. Also I decided my app would be in hebrew and i need medication names also
 success!! after long trial & error i made it. Encoutered several challenges:
  
  - couldnt grab search text input field. The selector was accurate but puppeteer always returned null.
- # solution: forced puppeteer to wait until page fully loads by using both "waitUntil" command
- # and "page.waitforselector" with the input's selector (not sure i needed to use both, but it works).
+ #### solution: forced puppeteer to wait until page fully loads by using both "waitUntil" command
+ #### and "page.waitforselector" with the input's selector (not sure i needed to use both, but it works).
  - couldnt grab results container selector even though I used the solution above.
- # solution: used the command waitForNetworkIdle(page,500,0) which make the browser wait until all results are fully loaded. Found this using the "screenshot" super-awsome function that takes a screenshot of the browser at a given moment. After doing this i saw a screenshot of the site's spinner, which made me realise the selector-grabbing function is invoked before page fully loads.
+ #### solution: used the command waitForNetworkIdle(page,500,0) which make the browser wait until all results are fully loaded. Found this using the "screenshot" super-awsome function that takes a screenshot of the browser at a given moment. After doing this i saw a screenshot of the site's spinner, which made me realise the selector-grabbing function is invoked before page fully loads.
  - result spans over 480 pages :O
- # solution: found an element with number of results on the page, grabbed its text content, distilled the number of results from it, divideed by 10 (#results per page) and created a loop that scrapes page's result -> click on the "next page" button -> add a comma before next page's result are scraped (so the json file that the data is scraped to would run appropriately)
+ #### solution: found an element with number of results on the page, grabbed its text content, distilled the number of results from it, divideed by 10 (#results per page) and created a loop that scrapes page's result -> click on the "next page" button -> add a comma before next page's result are scraped (so the json file that the data is scraped to would run appropriately)
 still need to improve the active ingredient property. sometimes the ingredient contains 2 words and the scraper scrape out only one. it might cause troubles when i'll fetch drug interaction & indications in the future. will fix it over the next few days. Now i need to keep doing other stuff!
 
  ive looked for a library that sends sms\whatsapp messages for clients. heard good things about twillo. After further research encountered "messageBird" that gives you unlimited text messages for 50 clients! will try it out tomorrow.
@@ -57,74 +59,3 @@ Also i changed the structure of the schema and now there are two separate schema
 
 ### captain's log 10.2.22
 Ok so everything seems to be working, but its still ugly af. gonna spend some serious time making it look decent. Also, im very excited because its 7:00pm and thats the time i set to get an Email reminder on medicines..AND IT WORKED!!! was really doubtful Oh wait a minute.. it sends me the email every minute LoL. I guess I scheduled it to send it to me at 7pm but at EVERY MINUTE of 7pm. Needs tweaking.
-
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
